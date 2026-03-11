@@ -85,6 +85,8 @@ For detailed instructions on defining custom models, configuring external forces
 
 Version 1.0.3 is a comprehensive modernization of the PeTTSy codebase, updating it from MATLAB R2015a-era APIs to full R2025a compatibility. This release was produced by [@tomjf](https://github.com/tomjf) (Tom Fletcher) and [Claude](https://claude.ai) (Anthropic). Every change is listed below.
 
+**Note on mathematical changes**: All changes that affect computation — the force formula corrections (section 5), solver and algorithm improvements (section 4), and Symbolic Math Toolbox modernization (section 3) — originate from the [upstream repository](https://github.com/pebrown88/pettsy) maintained by the original authors. The v1.0.3 modernization work by Tom Fletcher and Claude is limited to API compatibility updates (sections 1–2), bug fixes (section 6), and GUI infrastructure changes. No new mathematical or algorithmic changes were introduced by this fork.
+
 ---
 
 ### 1. Deprecated Function Replacements
