@@ -115,7 +115,6 @@ for i = 1:length(ModelForce)
 				df_ddusk_ddawn(i)=0;
 				df_ddawn_ddusk(i)=0;
 			end
-
 	end
 end
 
@@ -216,6 +215,5 @@ for i = 1:length(ModelForce)
 				df_ddusk_ddawn(i)=0;
 				df_ddawn_ddusk(i)=0;
 			end
-	
 	end
 end

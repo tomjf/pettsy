@@ -124,9 +124,8 @@ end
  bestt = t;
  besty = y;
  besteps = eps;
- bestper = per; %%%%%%%%%%%%%%%%%%%%%%%%
- 
- 
+ bestper = per;
+
 %eps is difference between start and end values
 % if difference between first and last poin of periodic solution
 % is larger then given precision then it tries to relax
@@ -160,7 +159,7 @@ if eps > tolper
             bestt = t;
             besty = y;
             besteps = eps;
-            bestper = per; %%%%%%%%%%%%%%%%%%%%%%%%
+            bestper = per;
         end
         if cnum >= 10 %give up 
             break;
@@ -177,7 +176,7 @@ end
 t = bestt;
 y = besty;
 eps = besteps;
-per = bestper; %%%%%%%%%%%%%%%%%%%%%%%%
+per = bestper;
 str = sprintf('best eps=%e',eps);
 disp(str);
 if ~isempty(gui)
@@ -201,7 +200,7 @@ solinit.y = y';  %note transpose
 lastwarn('');
 cnum = 0;
 sol = [];
-bvopts = bvpset('NMax', floor(10*length(t)*size(y,2)));%the default
+bvopts = bvpset('NMax', floor(10*length(t)*size(y,2)));
 while (eps > tolper) || (cnum == 0)
     cnum = cnum + 1;
     try
@@ -229,9 +228,9 @@ while (eps > tolper) || (cnum == 0)
         eps = norm(y(1,:) - y(end,:));
         solinit.x = sol.x;
         solinit.y = sol.y;
-    catch
+    catch ME
         %error
-        [msgstr msgid] = lasterr;
+        msgstr = ME.message;
         disp(msgstr);
         if ~isempty(gui)
             feval(gui,'write', msgstr);
