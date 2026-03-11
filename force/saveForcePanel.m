@@ -151,7 +151,7 @@ elseif strcmp(action, 'finished')
     end
     
    
-    force_eqn = char(subs(str2sym(force_eqn), 't', 't1'));
+    force_eqn = char(subs(str2sym(force_eqn), str2sym('t'), str2sym('t1')));
     if force_eqn(end) ~= ';'
         force_eqn = [force_eqn ';'];
     end

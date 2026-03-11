@@ -24,7 +24,9 @@ if numForce > 0
 end
 
 %calc derivative with respect to parameter
-pv = sym(parsym);
+for p = 1:length(parsym)
+   pv(p) = sym(parsym{p});
+end
 parn = parsym;
 jac1 = jacobian(rhs,pv); %dy/dp
 

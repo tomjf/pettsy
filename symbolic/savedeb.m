@@ -22,7 +22,9 @@ dim = length(rhs);
 %dforce1/ddawn2 will always be zero??? etc...
 
 %calc derivative with respect to parameter
-pv = sym(parsym);
+for p = 1:length(parsym)
+   pv(p) = sym(parsym{p});
+end
 parn = parsym;
 jac1 = jacobian(rhs,pv); %in savedifpar we replace y1 with y(1). don't do that here. Does this matter??
 
@@ -39,14 +41,16 @@ if include_force
         jac1 = [jac1 ddawn ddusk];
     end
 end
-jac1 = subs(jac1, varsym, vari);
+jac1 = subs(jac1, str2sym(varsym), str2sym(vari));
 
 %jac1 is dy/dp
 
 % Now get (dy/dp)/dp
 fprintf(1, '\tpreparing %d parameters:',length(parsym));
 %calc derivative with respect to parameter
-pv = sym(parsym);
+for p = 1:length(parsym)
+   pv(p) = sym(parsym{p});
+end
 for k=1:length(pv)
     fprintf(1,' %d ',k);
     if ~mod(k,20)

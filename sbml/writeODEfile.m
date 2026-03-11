@@ -89,10 +89,10 @@ for i = 1:length(Species)
          %gets rid of a*comp, comp*a and a/comp
          
           %replace species name with y(n) as in 'make()'
-         eqn = (subs(eqn, varsym, vari));
+         eqn = (subs(eqn, str2sym(varsym), str2sym(vari)));
        
          %replace parameter name with any user edits
-         eqn = (subs(eqn, sbml_par, sassy_par));
+         eqn = (subs(eqn, str2sym(sbml_par), str2sym(sassy_par)));
            
     end;
     

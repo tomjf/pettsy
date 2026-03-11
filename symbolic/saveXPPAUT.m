@@ -25,7 +25,7 @@ file = fopen(namer,'wt');
 %rhs will include y(1), y(2), etc ... for variable names.
 %want to change these to actual names stored in varnames
 
-rhss = subs(rhs, varsym, varnames);
+rhss = subs(rhs, str2sym(varsym), str2sym(varnames));
 
 %write the equations
 for i=1:dim

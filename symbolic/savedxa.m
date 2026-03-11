@@ -16,7 +16,7 @@ for j=1:dim
 end
 
 jac1 = jacobian(rhs,y); %dy/dy
-jac1 = subs(jac1, [forcesym parsym], [forcei pari]);%replace param names with p(n)
+jac1 = subs(jac1, [str2sym(forcesym) str2sym(parsym)], [str2sym(forcei) str2sym(pari)]);%replace param names with p(n)
 
 for k=1:dim
     dxa{k} = diff(jac1,y(k)); %d^2y/dy^2

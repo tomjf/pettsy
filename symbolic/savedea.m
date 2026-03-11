@@ -16,7 +16,7 @@ for j=1:dim
 end
 
 jac = jacobian(rhs,y);
-jac1 = subs(jac, varsym, vari);%replace y1 with y(1) ...
+jac1 = subs(jac, str2sym(varsym), str2sym(vari));%replace y1 with y(1) ...
 
 file = fopen(namer,'w');
 fileheader(file, name,'d_eps A');
@@ -32,7 +32,9 @@ if numForce > 0
 end
 
 %calc derivative with respect to parameter
-pv = sym(parsym);
+for p = 1:length(parsym)
+   pv(p) = sym(parsym{p});
+end
 parn = parsym;
 for k=1:length(pv)
     dif1{k} = diff(jac1,pv(k)); %this gives dim * dim matrix
