@@ -243,7 +243,7 @@ if strcmp(action,'init')
     uicontrol('HorizontalAlignment', 'left','Parent',newlcPanel ,'Style', 'text','FontWeight', 'bold','Units','centimeters','position',[0.5 1.5 4 0.5],'string','Select an ODE solver:','BackgroundColor', get(newFig, 'Color'), 'ForegroundColor', 'k', 'HandleVisibility', 'on', 'FontUnits', 'points', 'FontSize', 10);
     newsolverHndl=uicontrol( 'String', {'matlab';'cvode'}, 'HorizontalAlignment', 'left','Parent',newlcPanel ,'Style', 'popup','Units','centimeters','position',[0.5 0.75 (panelwidth-2)/4 0.5],'BackgroundColor', 'w', 'ForegroundColor', 'k', 'HandleVisibility', 'on', 'FontUnits', 'normalized', 'FontSize', 0.6);
     
-   stiffsolverHndl=uicontrol( 'String', {'stiff problem';'non-stiff problem'}, 'HorizontalAlignment', 'left','Parent',newlcPanel ,'Style', 'popup','Units','centimeters','position',[(1 + (panelwidth-2)/4) 0.75 (panelwidth-2)/4 0.5],'BackgroundColor', 'w', 'ForegroundColor', 'k', 'HandleVisibility', 'on', 'FontUnits', 'normalized', 'FontSize', 0.6);
+   stiffsolverHndl=uicontrol( 'String', {'stiff problem';'non-stiff (ode45)';'non-stiff (ode113)'}, 'HorizontalAlignment', 'left','Parent',newlcPanel ,'Style', 'popup','Units','centimeters','position',[(1 + (panelwidth-2)/4) 0.75 (panelwidth-2)/4 0.5],'BackgroundColor', 'w', 'ForegroundColor', 'k', 'HandleVisibility', 'on', 'FontUnits', 'normalized', 'FontSize', 0.6);
 
     if strncmp(theModel.ode_method, 'mat', 3)
        set(newsolverHndl, 'Value', 1); %set default solver
@@ -879,7 +879,13 @@ sol = get(newsolverHndl, 'String');
 si = get(newsolverHndl, 'Value');
 sol = sol{si};
 
-stiff = (get(stiffsolverHndl, 'value') == 1);
+stiff_val = get(stiffsolverHndl, 'value');
+stiff = (stiff_val == 1);
+if stiff_val == 3
+    matlab_solver = 'ode113';
+else
+    matlab_solver = 'ode45';
+end
 
 %params values
 params = cell2mat(get(newparamHndl, 'data'));
@@ -931,10 +937,10 @@ try
         %5 is estimate at time in sec between steps. More accurate this is 
         %the smoother the bar moves
         progressform('init', 16, 5);
-        theresults = limitcycle(theModel, 'gui', @progressform, 'param', params, 'ic', initc, 'varnum', vn, 'mtype', mtype, 'shift', shift, 'solver', {sol stiff}, 'env', env, 'force_type', ModelForce, 'cycle_period', cp);
+        theresults = limitcycle(theModel, 'gui', @progressform, 'param', params, 'ic', initc, 'varnum', vn, 'mtype', mtype, 'shift', shift, 'solver', {sol stiff matlab_solver}, 'env', env, 'force_type', ModelForce, 'cycle_period', cp);
     else
         progressform('init', 3, 5);
-        theresults = signal(theModel, 'gui', @progressform, 'param', params, 'ic', initc, 'solver', {sol stiff}, 'env', env, 'force_type', ModelForce, 'tend', tend);
+        theresults = signal(theModel, 'gui', @progressform, 'param', params, 'ic', initc, 'solver', {sol stiff matlab_solver}, 'env', env, 'force_type', ModelForce, 'tend', tend);
     end
    progressform('end');
 catch err

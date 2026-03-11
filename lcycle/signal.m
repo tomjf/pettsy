@@ -102,17 +102,21 @@ CP = tend;
 stiff_problem = method{2};
 
 if strcmp(method{1}, 'matlab')
-   
+
     if stiff_problem
         solver = 'ode15s';
     else
-        solver = 'ode45';
+        if length(method) >= 3
+            solver = method{3};
+        else
+            solver = 'ode45';
+        end
     end
-    
+
 else
-    
+
     solver = 'runCVode';
-    
+
 end
 
 
