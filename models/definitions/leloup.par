@@ -1,0 +1,64 @@
+k_1 0.8 Transport rate of Per-Cry complex from cytosol to nucleus
+k_2 0.4 Transport rate of Per-Cry complex from nucleus to cytosol
+k_3 0.8 Binding rate of Per and Cry proteins
+k_4 0.4 Unbinding rate of Per-Cry complex
+k_5 0.8 Transport rate of Bmal1 protein from cytosol to nucleus
+k_6 0.4 Transport rate of Bmal1 protein from nucleus to cytosol
+k_7 1 Binding rate of Per-Cry and Clock-Bmal1 complexes
+k_8 0.2 Unbinding rate of Per-Cry-Clock-Bmal1 complex
+k_9 0.8 Transport rate of RevErb protein from cytosol to nucleus
+k_10 0.4 Transport rate of RevErb protein from nucleus to cytosol
+K_AP 0.6 Threshold constant for activation of Per mRNA transcription by nuclear Bmal1
+K_AC 0.6 Threshold constant for activation of Cry mRNA transcription by nuclear Bmal1
+K_AR 0.6 Threshold constant for activation of RevErb mRNA transcription by nuclear Bmal1
+K_IB 1 Threshold constant for repression of Bmal1 mRNA transcription by nuclear RevErb 
+k_dmb 0.02 Non-specific degradation rate of Bmal1 mRNa
+k_dmc 0.02 Non-specific degradation rate of Cry mRNA
+k_dmp 0.02 Non-specific degradation rate of Per mRNA
+k_dmr 0.02 Non-specific degradation rate of RevErb mRNA
+k_dn 0.02 Non-specific degradation rate of proteins
+k_dnc 0.02 Non-specific degradation rate of cytosolic Cry
+k_dnb 0.02 added by Louis, non-specific degradation rate of Bmal protein in nucleus
+K_d 0.3 Michaelis constant for enzyme-mediated protein degradation
+K_dp 0.1 Michaelis constant for protein dephosphorylation
+K_p 1.006 Michaelis constant for protein phosphorylation
+K_mB 0.4 Michaelis constant for enzyme-mediated Bmal1 mRNA degradation
+K_mC 0.4 Michaelis constant for enzyme-mediated Cry mRNA degradation
+K_mP 0.3 Michaelis constant for enzyme-mediated Per mRNA degradation
+K_mR 0.4 Michaelis constant for enzyme-mediated RevErb mRNA degradation
+k_sB 0.32 Synthesis rate of Bmal1 protein (mRNA translation)
+k_sC 3.2 Synthesis rate of Cry protein (mRNA translation)
+k_sP 1.2 Synthesis rate of Per protein (mRNA translation)
+k_sR 1.7 Synthesis rate of RevErb protein (mRNA translation)
+m 2 Degree of cooperativity for negative feedback by RevErb on Bmal1 transcription 
+n 2 Degree of cooperativity for positive regulation of Per/Cry transcription by Bmal1 
+h 2 Degree of cooperativity for positive regulation of RevErb transcription by Bmal1 
+V_1B 1.4 Maximum rate of cytosolic Bmal1 protein phosphorylation
+V_1C 1.2 Maximum rate of cytosolic Cry protein phosphorylation
+V_1P 9.6 Maximum rate of cytosolic Per protein phosphorylation
+V_1PC 2.4 Maximum rate of cytosolic Per-Cry complex phosphorylation
+V_2B 0.2 Maximum rate of cytosolic Bmal1 protein dephosphorylation
+V_2C 0.2 Maximum rate of cytosolic Cry protein dephosphorylation
+V_2P 0.6 Maximum rate of cytosolic Per protein dephosphorylation
+V_2PC 0.2 Maximum rate of cytosolic Per-Cry complex dephosphorylation
+V_3B 1.4 Maximum rate of nuclear Bmal1 protein phosphorylation
+V_3PC 2.4 Maximum rate of nuclear Per-Cry complex phosphorylation
+V_4B 0.4 Maximum rate of nuclear Bmal1 protein dephosphorylation
+V_4PC 0.2 Maximum rate of nuclear Per-Cry complex dephosphorylation
+v_dBC 3 Maximum enzyme-mediated degradation rate of phosphorylated Bmal1 protein (cytosol)
+v_dBN 3 Maximum enzyme-mediated degradation rate of phosphorylated Bmal1 protein (nuclear)
+v_dCC 1.4 Maximum enzyme-mediated degradation rate of phosphorylated Cry protein (cytosol)
+v_dIN 1.6 Maximum enzyme-mediated degradation rate of Per-Cry-Clock-Bmal1 complex
+v_dPC 3.4 Maximum enzyme-mediated degradation rate of phosphorylated Per protein (cytosol)
+v_dPCC 1.4 Maximum enzyme-mediated degradation rate of phosphorylated Per-Cry complex (cytosol)
+v_dPCN 1.4 Maximum enzyme-mediated degradation rate of phosphorylated Per-Cry complex (nuclear)
+v_dRC 4.4 Maximum enzyme-mediated degradation rate of RevErb protein (cytosol)
+v_dRN 0.8 Maximum enzyme-mediated degradation rate of RevErb protein (nuclear)
+v_mB 1.3 Maximum enzyme-mediated degradation rate of Bmal1 mRNA
+v_mC 2 Maximum enzyme-mediated degradation rate of Cry mRNA
+v_mP 2.2 Maximum enzyme-mediated degradation rate of Per mRNA
+v_mR 1.6 Maximum enzyme-mediated degradation rate of RevErb mRNA
+v_sB 1.8 Maximum synthesis rate of Bmal1 mRNA
+v_sC 2.2 Maximum synthesis rate of Cry mRNA
+v_sP 2.4 Maximum synthesis rate of Per mRNA
+v_sR 1.6 Maximum synthesis rate of RevErb mRNA

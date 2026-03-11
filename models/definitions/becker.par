@@ -1,0 +1,32 @@
+v_1b 18 maximal rate of Per2/Cry transcription
+k_1b 1 Michaelis constant of Per2/Cry transcription
+k_1i 0.65 inhibition constant of Per2/Cry transcription
+c 0.001 concentration of constitutive Bmal1*
+p 8 Hill coefficient of inhibition of Per2/Cry transcription
+s 5 Hill coefficient of activation of Per2/Cry transcription
+k_1d 0.12 degradation of Per2/Cry mRNA
+k_2b 0.3 PER/CRY complex formation rate
+q 2 number of PER/CRY complex forming subunits
+k_2d 0.07 degradation rate of cytoplasmic PER/CRY
+k_2t 0.24 nuclear import rate of PER/CRY
+k_3t 0.02 nuclear export rate of PER/CRY
+k_3d 0.12 degradation rate of nuclear PER/CRY
+v_4b 3 maximal rate of Bmal1 transcription
+k_4b 1 Michaelis constant of Bmal1 transcription
+k_4i 0.9 inhibition constant of Bmal1 transcription
+u 3 Hill coefficient of Bmal1 inhibition
+k_4d 1.8 degradation rate of Bmal1 mRNA
+k_5b 0.14 translation rate of BMAL1
+k_5d 0.03 degradation rate of cytoplasmic BMAL1
+k_5t 0.15 nuclear import rate of BMAL1
+k_6t 0.06 nuclear export rate of BMAL1
+k_6d 0.03 degradation rate of nuclear BMAL1
+k_6a 0.03 activation rate of nuclear BMAL1
+k_7a 0.003 deactivation rate of nuclear BMAL1
+k_7d 0.02 degradation rate of activated nuclear BMAL1
+v_8b 10.6 maximal rate of REVERBa synthesis
+k_8b 1 Michaelis constant of REVERBa synthesis
+k_8i 1.1 inhibition constant of REVERBa synthessi
+r 1 Hill coefficient of REVERBa activation
+v 2 Hill coefficient of REVERBa inhibition
+k_8d 1.5 degradation rate of REVERBa

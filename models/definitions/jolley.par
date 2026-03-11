@@ -1,0 +1,21 @@
+eta_ma 0.313 degradation of Dbp mRNA
+eta_mb 1.542 degradation of Ror a/b mRNA
+eta_mc 0.551 degradation of Cry1 mRNA
+eta_md 1.157 degradation of Reverb a/b mRNA
+eta_me 0.267 degradation of E4bp4 mRNA
+eta_pA 0.434 degradation of DBP protein
+eta_pB 0.113 degradation of ROR a/b protein
+eta_pC 0.328 degradation of CRY1 protein
+eta_pD 0.686 degradation of REVERB a/b protein
+eta_pE 0.254 degradation of E4BP4 protein
+n 3.426 Hill coefficient
+chi_1 0.486 repression of a by C
+chi_2 0.731 activation of b by A
+chi_3 0.00000679 repression of b by E
+chi_4 0.3 activation of c by A
+chi_5 0.218 activation of c by B
+chi_6 1.384 repression of c by D
+chi_7 0.00000678repression of c by E
+chi_8 0.417 repression of d by C
+chi_9 0.00000677 activation of e by B
+chi_10 0.0000067 repression of e by D
