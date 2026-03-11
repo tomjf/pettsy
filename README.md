@@ -193,7 +193,7 @@ Each file had `findsym` calls followed by `strtok` or `strsplit` comma-parsing l
 
 **`force/saveForcePanel.m`** (lines 244-251): The user-defined force equation validation function used `findsym(sym(force_eqn))` + `strsplit(vars, ',')` to find variables in the equation and check for invalid names. Replaced with `symvar(force_eqn)` and a `for` loop using `char(vars(vi))` to check each variable name.
 
-#### `subs` with `str2sym` Wrapping (8 files)
+#### `subs` with `str2sym` Wrapping (14 files)
 
 In modern MATLAB's Symbolic Math Toolbox, the `subs` function no longer accepts plain strings as variable names - they must be symbolic expressions. All `subs` calls that passed string cell arrays as the "old variable" or "new variable" arguments have been wrapped with `str2sym()` to convert them to symbolic form.
 
@@ -207,7 +207,19 @@ In modern MATLAB's Symbolic Math Toolbox, the `subs` function no longer accepts 
 
 **`models/make.m`** (lines 455-457): Three `subs` calls for displaying symbolic matrices to users. Line 455: `subs(rhs, varsym, varnames)` → wrapped both args. Line 456: `subs(dydtdk_tmp, vari, varnames)` → wrapped both args. Line 457: `subs(dydtdy_tmp, [varsym pari forcei], [varnames parn' forcesym])` → wrapped all string arrays with `str2sym` and concatenated the symbolic results.
 
-**`force/saveForcePanel.m`** (lines 154, 265, 267): Line 154: `subs(force_eqn, 't', 't1')` → `subs(str2sym(force_eqn), 't', 't1')` to convert the user-entered equation string to a symbolic expression before substitution. Lines 265, 267: `diff(sym(force_eqn), varname)` → `diff(str2sym(force_eqn), varname)` to use `str2sym` instead of the deprecated `sym` string-to-symbolic conversion.
+**`force/saveForcePanel.m`** (lines 154, 265, 267): Line 154: `subs(force_eqn, 't', 't1')` → `subs(str2sym(force_eqn), str2sym('t'), str2sym('t1'))` to convert all arguments to symbolic form. Lines 265, 267: `diff(sym(force_eqn), varname)` → `diff(str2sym(force_eqn), varname)` to use `str2sym` instead of the deprecated `sym` string-to-symbolic conversion.
+
+**`symbolic/savedeb.m`** (line 42): `subs(jac1, varsym, vari)` → `subs(jac1, str2sym(varsym), str2sym(vari))` where the Jacobian matrix has string cell arrays for variable name substitution. Also applied the `sym(parsym{p})` loop pattern (lines 25, 51) to avoid built-in name clashes.
+
+**`symbolic/savedea.m`** (line 19): `subs(jac, varsym, vari)` → `subs(jac, str2sym(varsym), str2sym(vari))` for the same variable substitution pattern. Also applied the `sym(parsym{p})` loop pattern (line 35).
+
+**`symbolic/savedxa.m`** (line 19): `subs(jac1, [forcesym parsym], [forcei pari])` → `subs(jac1, [str2sym(forcesym) str2sym(parsym)], [str2sym(forcei) str2sym(pari)])` wrapping both force and parameter name arrays.
+
+**`symbolic/savedxb.m`** (line 27): Applied the `sym(parsym{p})` loop pattern to avoid built-in name clashes when creating symbolic parameter variables for Jacobian differentiation.
+
+**`symbolic/saveXPPAUT.m`** (line 28): `subs(rhs, varsym, varnames)` → `subs(rhs, str2sym(varsym), str2sym(varnames))` for the XPPAUT equation export file.
+
+**`sbml/writeODEfile.m`** (lines 92, 95): Line 92: `subs(eqn, varsym, vari)` → `subs(eqn, str2sym(varsym), str2sym(vari))` for species name substitution. Line 95: `subs(eqn, sbml_par, sassy_par)` → `subs(eqn, str2sym(sbml_par), str2sym(sassy_par))` for SBML parameter name mapping.
 
 ---
 
