@@ -55,34 +55,7 @@ if strcmp(action, 'init')
    msg = fileread(fullfile(myDir, 'readme.txt'));
     
     txtpos = [0.5 0.5 panelwidth-1 panelheight-3];
-    try
-        import javax.swing.*
-        import java.awt.*
-      
-        %java must position in pixels
-        pixels_per_cm = get(0, 'screenpixelsperinch')/2.54;
-
-        txtHndl = javaObjectEDT('javax.swing.JTextPane');
-        jscroll = javacomponent(javax.swing.JScrollPane(txtHndl), txtpos*pixels_per_cm, panel);
-        jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        txtHndl.setEditable(false);
-        txtHndl.setContentType('text/html');
-        txtHndl.setText(msg);
-         
-    catch
-        %didn't work, use standard matlab ctrl without html
-        msg = regexprep(msg, '<[^>]*>', '');
-        
-        txtHndl=uicontrol( ...
-            'Style','text', ...
-            'Units','centimeters', ...
-            'position',txtpos, ...
-            'Parent',panel, ...
-            'BackgroundColor', 'w', ...
-            'horizontalalignment', 'left', ...
-            'string', msg, ...
-            'FontUnits', 'points', 'FontSize', 9, 'FontName', 'SansSerif');
-    end
+    [txtHndl, ~] = create_html_panel(panel, txtpos, msg, false);
     
    
 

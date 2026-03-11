@@ -150,11 +150,11 @@ elseif strcmp(action, 'set')
     %The order they are set in must match the order they are written to file
     %in
     numvar = length(get(varList, 'String'));
-    vars = str2num(vars);
+    vars = sscanf(vars, '%f')';
     m = find( vars > numvar);
     vars(m) = [];
     set(varList, 'Value', vars);
-    set(normChk, 'Value', str2num(nm));
+    set(normChk, 'Value', str2double(nm));
     %return index value for next panel
     r = idx; 
 elseif strcmp(action, 'save')

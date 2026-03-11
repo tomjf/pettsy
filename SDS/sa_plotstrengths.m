@@ -206,7 +206,7 @@ elseif strcmp(action, 'plot')
             uicontrol(sealevelHndl);
             return;
         end
-        slv = str2num(slv);
+        slv = str2double(slv);
      else 
          slv = [];
      end
@@ -250,22 +250,22 @@ elseif strcmp(action, 'set')
     %The order they are set in must match the order they are written to file
     %in
     
-    set(plotList, 'Value', str2num(ptype));
+    set(plotList, 'Value', str2double(ptype));
     
     
-    set(groupChk, 'Value', str2num(grp));
+    set(groupChk, 'Value', str2double(grp));
     
     opts = get(parOpt, 'UserData');
-    set(opts(str2num(partype)), 'Value', 1);
-    set(sortHndl, 'Value', str2num(srt));
+    set(opts(str2double(partype)), 'Value', 1);
+    set(sortHndl, 'Value', str2double(srt));
     
-    set(sealevelChk, 'Value', str2num(sl));
+    set(sealevelChk, 'Value', str2double(sl));
     set(sealevelHndl, 'String', slv);
-    set(normChk, 'Value', str2num(nm));
+    set(normChk, 'Value', str2double(nm));
     
     
     opts = get(scaleHndl, 'UserData');
-    set(opts(str2num(sc)), 'Value', 1);
+    set(opts(str2double(sc)), 'Value', 1);
     %return index value for next panel
     r = idx; 
     sa_plotstrengths('changeType');
@@ -461,11 +461,11 @@ for i = 1:numplots
         'FontSize',12);
     if sl
         lbls = get(gca, 'ZTickLabel');
-        lbls = str2num(lbls) + slv;
+        lbls = sscanf(lbls, '%f') + slv;
         set(gca, 'ZTickLabel', lbls);
-        
+
         lbls = get(colorbar1, 'YTickLabel');
-        lbls = str2num(lbls) + slv;
+        lbls = sscanf(lbls, '%f') + slv;
         set(colorbar1, 'YTickLabel', lbls);
     end
     title(tstr, 'FontSize', plot_font_size);
@@ -656,11 +656,11 @@ for i = 1:numplots
     %correct vertical scale
     if sl
         lbls = get(axes1, 'ZTickLabel');
-        lbls = str2num(lbls) + slv;
+        lbls = sscanf(lbls, '%f') + slv;
         set(axes1, 'ZTickLabel', lbls);
         if ~isempty(axes2)
             lbls = get(axes2, 'ZTickLabel');
-            lbls = str2num(lbls) + slv;
+            lbls = sscanf(lbls, '%f') + slv;
             set(axes2, 'ZTickLabel', lbls);
         end
     end
@@ -813,7 +813,7 @@ for i = 1:numplots
         %correct the scale
         if sl
             lbls = get(gca, 'YTickLabel');
-            lbls = str2num(lbls) + slv;
+            lbls = sscanf(lbls, '%f') + slv;
             set(gca, 'YTickLabel', lbls, 'fontsize', plot_font_size);
         end
         ylabel(zlbl, 'FontSize', plot_font_size);
@@ -860,7 +860,7 @@ for i = 1:numplots
  
             if sl
                 lbls = get(gca, 'YTickLabel');
-                lbls = str2num(lbls) + slv;
+                lbls = sscanf(lbls, '%f') + slv;
                 set(gca, 'YTickLabel', lbls);
             end
          %   ylabel(zlbl, 'fontsize', plot_font_size);

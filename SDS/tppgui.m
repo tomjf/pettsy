@@ -109,7 +109,7 @@ if strcmp(action,'init')
     tpTbl = uitable('units', 'centimeters', 'position', [0.5 0.5 2.75 pheight-4.5], ...
                     'fontunits', 'points', 'fontsize', 10, ...
                     'parent', panel);
-    set(tpTbl, 'celleditcallback', @time_click);
+    set(tpTbl, 'CellEditCallback', @time_click);
     
  
     %get the time points from file
@@ -123,7 +123,7 @@ if strcmp(action,'init')
     
     tmp = zeros(size(t_range, 1), 1);
     for i = 1:size(t_range, 1)
-        tmp(i) = str2num(t_range{i,2});
+        tmp(i) = str2double(t_range{i,2});
     end
    t_range = tmp;
     
@@ -223,7 +223,7 @@ elseif strcmp(action,'selall')
 elseif strcmp(action,'selevery')
     
     seln = get(everyTimeHndl, 'string');
-    seln = str2num(seln);
+    seln = sscanf(seln, '%f')';
     if isempty(seln)
        ShowError('Please enter a valid number.');
        uicontrol(everyTimeHndl);

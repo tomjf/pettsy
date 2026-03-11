@@ -319,7 +319,10 @@ if strcmp(fname, '-none-')
     end
 else
     %read selected file
-    pvals = textread(fullfile(theModel.dir, fname), '%f');
+    fid_tmp = fopen(fullfile(theModel.dir, fname), 'r');
+    tmp_scan = textscan(fid_tmp, '%f');
+    fclose(fid_tmp);
+    pvals = tmp_scan{1};
     if length(pvals) ~= theModel.pnum
         ShowError('The selected parameters file is invalid.');
         return; 
@@ -442,7 +445,10 @@ if strcmp(fname, '-none-')
     end
 else
     %read selected file
-    ivals = textread(fullfile(theModel.dir, fname), '%f');
+    fid_tmp = fopen(fullfile(theModel.dir, fname), 'r');
+    tmp_scan = textscan(fid_tmp, '%f');
+    fclose(fid_tmp);
+    ivals = tmp_scan{1};
     if length(ivals) ~= theModel.vnum
         ShowError('The selected initial conditions file is invalid.');
         return; 
@@ -730,7 +736,7 @@ end
 %get length of simulation
 if ~per
     if strcmp(theModel.orbit_type, 'oscillator')%only osc
-        CP = str2num(theModel.cycle_period);
+        CP = str2double(theModel.cycle_period);
     else
         tend = get(tendHndl, 'String');
         tend = CorrectNumber(tend);
@@ -738,7 +744,7 @@ if ~per
             tend = theModel.tend;  %set to default
         end
         set(tendHndl, 'String', tend);
-        tend = str2num(tend);
+        tend = str2double(tend);
         CP = tend;
     end
     t = [0 CP];
@@ -760,7 +766,7 @@ else    %periodic force
         set(tendHndl, 'String', tend);
         cp = tend;
     end
-    CP = str2num(cp);
+    CP = str2double(cp);
     t = [0:(CP/1000):CP];
 end
 
@@ -818,7 +824,7 @@ if strcmp(theModel.orbit_type, 'oscillator')%only osc
             shift = '0';
         end
         set(shiftHndl, 'String', shift);
-        shift = str2num(shift);
+        shift = str2double(shift);
         if(get(shiftsignHndl, 'value') == 2)
             shift = -shift;
         end
@@ -847,7 +853,7 @@ if strcmp(theModel.orbit_type, 'oscillator')%only osc
             cp = theModel.cycle_period;  %set to default
         end
         set(cpHndl, 'String', cp);
-        cp = str2num(cp);
+        cp = str2double(cp);
         %mtype not used for forced model
         mtype = [];
     end
@@ -865,7 +871,7 @@ else
         tend = theModel.tend;  %set to default
     end
     set(tendHndl, 'String', tend);
-    tend = str2num(tend);
+    tend = str2double(tend);
 end
 
 %solver

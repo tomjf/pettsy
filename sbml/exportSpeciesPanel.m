@@ -206,30 +206,30 @@ elseif strcmp(action, 'gonext')
     end
     
     units_scale = get(unitsScaleHndl, 'string');
-    
+
     if isempty(units_scale)
-       units_scale = 0; 
+       units_scale = 0;
     else
-        units_scale = str2num(units_scale);
+        units_scale = str2double(units_scale);
         if isempty(units_scale) || (units_scale ~= floor(units_scale))
            ShowError('Please enter an integer value for scale.');
            uicontrol(unitsScaleHndl);
            return
         end
     end
-    
+
     time_name = fixXMLString(get(timeNameHndl, 'string')); %check for illegal chars in SBML name attribute
     if isempty(time_name)
         time_name = 'seconds';
     end
-    
+
     time_mult = get(timeScaleHndl, 'string');
-  
-    
+
+
     if isempty(time_mult)
-       time_mult = 1; 
+       time_mult = 1;
     else
-        time_mult = str2num(time_mult);
+        time_mult = str2double(time_mult);
         if isempty(time_mult) || (time_mult <= 0)
            ShowError('Please enter a positive numeric value for time multiplier.');
            uicontrol(timeScaleHndl);
@@ -295,7 +295,10 @@ if strcmp(fname, '-none-')
   
 else
     %read selected file
-    ivals = textread(fullfile(model.dir, fname), '%f');
+    fid_tmp = fopen(fullfile(model.dir, fname), 'r');
+    tmp_scan = textscan(fid_tmp, '%f');
+    fclose(fid_tmp);
+    ivals = tmp_scan{1};
     if length(ivals) ~= size(tblData, 1)
         ShowError('The selected initial conditions file is invalid.');
         return; 

@@ -1,6 +1,6 @@
 function r = th_tippanel(action, varargin)
 
-persistent panel status mainFig txtHndl hideHndl clearHndl titleHndl previousMessages clear_highlight box_is_formatted jeditbox;
+persistent panel status mainFig txtHndl hideHndl clearHndl titleHndl previousMessages clear_highlight box_is_formatted htmlContent txtIsHtml;
 
 global rightMenu bottomMenu mydir %need to remove check when panel closed
 
@@ -23,19 +23,8 @@ if strcmp(action, 'init')
         'position',[0 0 0.1 0.1], ...
         'string','Messages');
 
-    txtHndl=uicontrol( ...
-        'Style','edit', ...
-        'Units','centimeters', ...
-        'position',[0 0 0.1 0.1], ...
-        'Parent',panel, ...
-        'BackgroundColor', 'w', ...
-        'Max', 10, 'Min', 0, ...
-        'horizontalalignment', 'left', ...
-        'enable', 'inactive',...
-        'string', cell(0), ...
-        'value', [], ...
-        'FontUnits', 'points', 'FontSize', 9, 'FontName', 'SansSerif');
-    %multi line edit box will display html
+    [txtHndl, txtIsHtml] = create_html_panel(panel, [0 0 0.1 0.1], '', false);
+    htmlContent = '';
     clearHndl= uicontrol( ...
         'Style','pushbutton', ...
         'Units','centimeters', ...
@@ -120,46 +109,7 @@ elseif strcmp(action, 'show')
         set(clearHndl, 'position', [formsize(3)-1.8 3.3 1 0.5]);
     end
     status = pos;
-    try
-        if ~box_is_formatted
-            %this pane hasn't yet been displayed, get java object and customise
-            import javax.swing.*
-            import java.awt.*
-            t = clock;
-            jscrollpane = [];
-            attempts = 1;
-            while isempty(jscrollpane)
-                %there can be a delay before this object appears, even
-                %though function has completed.
-               if attempts > 3
-                   exception = MException('findjobj:ObjectNotFound', ...
-                                    'Could not find the java object for the tip panel');
-                  throw(exception);
-               end
-               drawnow;
-               jscrollpane = findjobj(txtHndl);
-               attempts = attempts+1;
-            end
-            if ~isempty(jscrollpane)
-                jscrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-                jscrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                %ensure latest text always visible
-                jscrollpane.anchorToBottom();
-                jeditbox = jscrollpane.getViewport.getView;
-                %make non-editable
-                jeditbox.setEditable(false);
-                %make lines wrap
-                jeditbox.setWrapping(true);
-                %set content type
-                jeditbox.setContentType('text/html');
-                
-               
-                box_is_formatted=true;
-            end
-        end
-    catch err
-        ShowError('Java Error', err);
-    end
+    box_is_formatted = true;
     
     
 elseif strcmp(action, 'hide')
@@ -196,36 +146,28 @@ elseif strcmp(action, 'write')
 
     msg = varargin{1};
     level = varargin{2};
-    
+
     %keep a record of messages to avoid repetitive ones
     if box_is_formatted && ~(length(msg) == length(previousMessages) && all(strcmp(msg, previousMessages)))
 
         %add text to content
-        
-        str = char(jeditbox.getText());
-        
-        icon = '';
+
         if clear_highlight
             %grey out text no longer relevant
-            str = regexprep(str, 'color\s*=\s*"black"', 'color="#888888"');
+            htmlContent = regexprep(htmlContent, 'color\s*=\s*"black"', 'color="#888888"');
             clear_highlight = false;
         end
-        %add icon for next block of text
+        %add icon marker for next block of text
+        icon = '';
         if level == 1
-            %information
-            icon = fullfile(matlabroot, 'toolbox', 'matlab', 'icons', 'demoicon.gif');
+            icon = '[i] ';
         elseif level == 2
-            %warning
-            icon = fullfile(matlabroot, 'toolbox', 'matlab', 'icons', 'warning.gif');
+            icon = '[!] ';
         elseif level == 3
-            %action required
-            icon = fullfile(matlabroot, 'toolbox', 'matlab', 'icons', 'greenarrowicon.gif');
+            icon = '[>] ';
         end
-        if level > 0
-            icon = ['<img src="file:///' icon '" height=16 width=16>'];
-        end
-        
-        
+
+
         if iscell(msg)
             msgtowrite = '';
             for i = 1:length(msg)
@@ -236,19 +178,24 @@ elseif strcmp(action, 'write')
         end
 
         %add new message
-        str = strrep(str, '</body>', ['<div style="margin-top:5px"><font color="black"><table><tr><td valign="top">' icon '</td><td>'  msgtowrite '</td></tr></table></font></div></body>']);
-        jeditbox.setText(str);
-        jeditbox.setCaretPosition(jeditbox.getDocument.getLength);
+        htmlContent = [htmlContent '<div style="margin-top:5px"><font color="black">' icon msgtowrite '</font></div>'];
+        try
+            txtHndl.Data = htmlContent;
+        catch
+            set(txtHndl, 'String', regexprep(htmlContent, '<[^>]*>', ''));
+        end
         previousMessages = msg;
-   
+
     end
 
-    %msgIdx = 0;
-    %previousMessages = [previousMessages msgIdx];%clear could empty this
-    
 elseif strcmp(action, 'clear')
 
-    jeditbox.setText('');
+    htmlContent = '';
+    try
+        txtHndl.Data = '';
+    catch
+        set(txtHndl, 'String', '');
+    end
     clear_highlight = true;
     previousMessages = [];
     

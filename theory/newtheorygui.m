@@ -326,7 +326,7 @@ elseif strcmp(action, 'start')
     
     %start timer
     %period cant have > 3 dp, or get a warning
-    timer_period = str2num(sprintf('%.3f', (interval/num_div)));
+    timer_period = str2double(sprintf('%.3f', (interval/num_div)));
     
     
     tm = timer('TimerFcn', {@timer_update, num_div, barHndl, barInc, maxWidth}, 'ExecutionMode', 'fixedRate', 'Period', timer_period, 'TasksToExecute', num_div);
@@ -432,11 +432,7 @@ try
     if ~isempty(PAR_ENV)
         NUM_LABS = get(workersHndl, 'value');
         display_message('Starting parallel environment...');
-        if verLessThan('matlab', '8.2') %R2013a or earlier
-            matlabpool('open', char(PAR_ENV), NUM_LABS);
-        else
-            parpool(char(PAR_ENV), NUM_LABS);
-        end
+        parpool(char(PAR_ENV), NUM_LABS);
         display_message('done', 1);
     end
 
@@ -452,11 +448,7 @@ end
 if ~isempty(PAR_ENV)
     display_message('Shutting down parallel environment...');
     try
-         if verLessThan('matlab', '8.2') %R2013a or earlier
-            matlabpool('close');
-        else
-            delete(gcp('nocreate'));
-        end
+        delete(gcp('nocreate'));
     catch
         %fails if it didn't open, ignore this
     end

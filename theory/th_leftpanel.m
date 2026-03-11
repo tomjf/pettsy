@@ -174,9 +174,9 @@ elseif strcmp(action, 'save')
     fprintf(fp, '%d\n', get(resHndl, 'Value'));
     
 elseif strcmp(action, 'load')
-    
+
     vals = varargin{1};
-    vals = str2num(vals{1});
+    vals = sscanf(vals{1}, '%f')';
     if length(get(resHndl, 'string')) >= vals
         set(resHndl, 'Value', vals);
     end

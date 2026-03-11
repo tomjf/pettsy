@@ -33,37 +33,7 @@ if strcmp(action, 'init')
    msg = fileread(fullfile(myDir, 'export.txt'));
     
     txtpos = [0.5 0.5 panelwidth-1 panelheight-1];
-    try
-        import javax.swing.*
-        import java.awt.*
-      
-        %java must position in pixels
-        pixels_per_cm = get(0, 'screenpixelsperinch')/2.54;
-
-        txtHndl = javaObjectEDT('javax.swing.JTextPane');
-        jscroll = javacomponent(javax.swing.JScrollPane(txtHndl), txtpos*pixels_per_cm, panel);
-        jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        txtHndl.setEditable(false);
-        txtHndl.setContentType('text/html');
-        txtHndl.setText(msg);
-        
-        set(txtHndl, 'HyperlinkUpdateCallback', @gotoLink);
- 
-         
-    catch
-        %didn't work, use standard matlab ctrl without html
-        msg = regexprep(msg, '<[^>]*>', '');
-        
-        txtHndl=uicontrol( ...
-            'Style','text', ...
-            'Units','centimeters', ...
-            'position',txtpos, ...
-            'Parent',panel, ...
-            'BackgroundColor', 'w', ...
-            'horizontalalignment', 'left', ...
-            'string', msg, ...
-            'FontUnits', 'points', 'FontSize', 9, 'FontName', 'SansSerif');
-    end
+    [txtHndl, ~] = create_html_panel(panel, txtpos, msg, false);
     
 
     r = panel;
@@ -108,12 +78,5 @@ elseif strcmp(action, 'isvisible')
     end
 end
 
-function gotoLink(~, eventdata)
-
-eventype = char(eventdata.getEventType);
-
-if strcmp(eventype, char(eventdata.getEventType.ACTIVATED))
-    %a click, not just mouse over/exit
-   web(char(eventdata.getURL), '-browser'); 
-end
+% Hyperlink callback no longer needed - uihtml handles links via browser natively
 

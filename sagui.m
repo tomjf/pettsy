@@ -435,22 +435,25 @@ all_par = cell(length(expts),1);
 %for each selected experiment
 for e = 1:length(expts)
     set(mainFig_sa, 'pointer', 'watch');
-    cvs = textread([CurrentModel_sa.dir, '/results/' char(expts(e)), '.expt'], '%[^\n]');
+    fid_tmp = fopen([CurrentModel_sa.dir, '/results/' char(expts(e)), '.expt'], 'r');
+    tmp_scan = textscan(fid_tmp, '%[^\n]');
+    fclose(fid_tmp);
+    cvs = tmp_scan{1};
     datafile = char(cvs(1));
 
-    periodic = str2num(char(cvs(3)));
-    
+    periodic = str2double(char(cvs(3)));
+
     vars = cell(0);
     for i = 4:length(cvs)
         if strcmp(char(cvs(i)), '--')
-           break; 
+           break;
         end
-        vars{i-3} = str2num(char(cvs(i)));
+        vars{i-3} = sscanf(char(cvs(i)), '%f')';
     end
     tidx = [];
     cvs = cvs(i+1:end);
     for j = 1:length(cvs)
-        if str2num(char(cvs(j)))
+        if str2double(char(cvs(j)))
             tidx = [tidx j];
         end
     end

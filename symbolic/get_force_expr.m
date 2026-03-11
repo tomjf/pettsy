@@ -81,8 +81,15 @@ switch ft
        return;
 end
 
+% if isnumeric(f) || isempty(strfind(findsym(f), 't1'))
+%     ftype = 2;%constant as is not a function of time
+% elseif ~isempty(strfind(findsym(f), 'CP'))
+%     ftype = 1;%periodic as is a function of CP and time
+% else
+%     ftype = 0;%not constant, but not periodic either
+% end
 
-if isnumeric(f) || ~any(symvar(f) == 't1')
+if isnumeric(f) || ~any(symvar(f) == str2sym('t1'))
     ftype = 1;%constant as is not a function of time
 else
     ftype = 0;%not constant

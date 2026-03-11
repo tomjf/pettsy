@@ -164,25 +164,16 @@ elseif strcmp(action, 'newtheory')
         
 elseif strcmp(action, 'selall')
     
-    user_data = get(paramsHndl, 'UserData');
-    if isfield(user_data, 'jtable')
-        for r = 0:user_data.jtable.getRowCount-1
-            user_data.jtable.setValueAt(true, r, 0);
-        end
-        
-    end
-    
+    tblData = get(paramsHndl, 'Data');
+    tblData(:,1) = {true};
+    set(paramsHndl, 'Data', tblData);
 
-            
+
 elseif strcmp(action, 'clearall')
-    
-  user_data = get(paramsHndl, 'UserData');
-    if isfield(user_data, 'jtable')
-        for r = 0:user_data.jtable.getRowCount-1
-            user_data.jtable.setValueAt(false, r, 0);
-        end
-        
-    end
+
+    tblData = get(paramsHndl, 'Data');
+    tblData(:,1) = {false};
+    set(paramsHndl, 'Data', tblData);
      
 elseif strcmp(action, 'plot')
     
@@ -211,19 +202,19 @@ elseif strcmp(action, 'set')
     idx = varargin{1};
     vals = varargin{2};
     
-    psel = str2num(vals{idx});
+    psel = str2double(vals{idx});
     idx = idx + 1;
     pv = vals{idx};
     idx = idx + 1;
     iv = vals{idx};
     idx = idx + 1;
-    so = str2num(vals{idx});
+    so = str2double(vals{idx});
     idx = idx + 1;
-    srt = str2num(vals{idx});
+    srt = str2double(vals{idx});
     idx = idx + 1;
-    scl = str2num(vals{idx});
+    scl = str2double(vals{idx});
     idx = idx + 1;
-    pt = str2num(vals{idx});
+    pt = str2double(vals{idx});
     idx = idx + 1;
     
     set(paramsHndl, 'value', psel);
@@ -322,16 +313,9 @@ function doplot(data, toplot, paramsHndl, scaleHndl, plotTypeHndl, fname, modeln
 %global phase_plot_styles;
 global plot_font_size
 
-user_data = get(paramsHndl, 'Userdata');
-%find order in whichrows of table are disaplyed, in case user has sorted
-%sort data as table is sorted
-sorted_idx = zeros(user_data.jtable.getRowCount,1);
-for r = 0:user_data.jtable.getRowCount-1;
-    %input to this function is real index, output is the position of
-    %this row as it appears in the sorted table
-    sorted_idx(r+1) = user_data.jtable.getModel.getSortedRowAt(r) + 1; %note +1, table is java array, zero based
-    
-end
+%find order in which rows of table are displayed
+tblData = get(paramsHndl, 'Data');
+sorted_idx = (1:size(tblData,1))';
 
 %extract required data
 ircs = data.theory.irc.data(:, toplot);
@@ -372,10 +356,10 @@ if s==1
    %auto scaling
    ColourRange = max([maxAdvances; abs(maxDelays)]);
    if ColourRange == 0 %no selected param has any phase change
-       ColourRange = str2num(str{2});
+       ColourRange = str2double(str{2});
    end
 else
-    ColourRange = str2num(str{s});
+    ColourRange = str2double(str{s});
 end
 tstr = 'Infinitesimal Response Curve';
 
@@ -695,14 +679,7 @@ else
     user_data.model = results.name;
     set(hTable, 'data', params, 'UserData', user_data);
     
-    if isfield(user_data, 'jtable') %table has already been made sortable
-        user_data.jtable.unsort; %confusing if table pre-sorted as arrow doesn't appear in header cell
-        if ~isempty(user_data.jtable.getColumnModel.getColumn(0).getHeaderRenderer)
-            %this can't have been done when table was made sortable if it
-            %was empty at the time
-            user_data.jtable.getColumnModel.getColumn(0).getHeaderRenderer.setToolTipText('Click on a column heading to sort the list');
-        end
-    end
+    %sorting resets on data change with native MATLAB uitable
 end
 
 

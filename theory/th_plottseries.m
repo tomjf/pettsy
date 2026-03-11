@@ -303,13 +303,13 @@ elseif strcmp(action, 'set')
     vals = varargin{2};
     plottype = vals{idx};
     idx = idx + 1;
-    xsel = str2num(vals{idx});
+    xsel = str2double(vals{idx});
     idx = idx + 1;
-    ysel = str2num(vals{idx});
+    ysel = str2double(vals{idx});
     idx = idx + 1;
-    zsel = str2num(vals{idx});
+    zsel = str2double(vals{idx});
     idx = idx + 1;
-    nm = str2num(vals{idx});
+    nm = str2double(vals{idx});
     idx = idx + 1;
     %The order they are set in must match the order they are written to file
     %in

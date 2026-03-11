@@ -103,7 +103,7 @@ elseif strcmp(action, 'set')
     idx = idx + 1;
     %The order they are set in must match the order they are written to file
     %in
-    set(normChk, 'Value', str2num(nm));
+    set(normChk, 'Value', str2double(nm));
     %return index value for next panel
     r = idx; 
 elseif strcmp(action, 'save')

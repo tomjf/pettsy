@@ -174,11 +174,11 @@ elseif strcmp(action, 'set')
     %set control values from settings file read at startup
     idx = varargin{1};
     vals = varargin{2};
-    s = str2num(vals{idx});
+    s = str2double(vals{idx});
     idx = idx + 1;
-    srt = str2num(vals{idx});
+    srt = str2double(vals{idx});
     idx = idx + 1;
-    n = str2num(vals{idx});
+    n = str2double(vals{idx});
     idx = idx + 1;
  
     %The order they are set in must match the order they are written to file

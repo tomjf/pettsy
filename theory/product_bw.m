@@ -54,14 +54,14 @@ if check_condition_number
             %cancel clicked so accept current condition numbers
             break;
         else
-            numTimeIntervals = str2num(answer{1});
+            numTimeIntervals = str2double(answer{1});
             while isempty(numTimeIntervals)
                 %non-numeric text entered
                 answer = inputdlg('Enter a larger number of time blocks','PeTTSy');
                 if isempty(answer)
                     break; %User clicks cancel so accept last value
                 end
-                numTimeIntervals = str2num(answer{1});
+                numTimeIntervals = str2double(answer{1});
             end
             if isempty(answer)
                 break; %User clicks cancel so accept last value

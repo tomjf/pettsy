@@ -19,19 +19,16 @@ if dif1 == 0
     return
 end
 
-s = findsym(dif1);
+s = symvar(dif1);
 
-rem = s;
-    
-while length(rem)
-    [t, rem] = strtok(rem,',');
-    t = strtok(t);
-    for j=1:length(vp)            
+for n = 1:length(s)
+    t = char(s(n));
+    for j=1:length(vp)
         if strcmp(t,vp{j})
             i=i+1;
             t1{i} = t;
             s1{i}=vps{j};
-            break;                   
+            break;
         end
     end
 end

@@ -100,7 +100,7 @@ elseif strcmp(action, 'save')
 elseif strcmp(action, 'load') 
     %called at startup
     vals = varargin{1};
-    set(plotTypeHndl, 'Value', str2num(vals{1}));
+    set(plotTypeHndl, 'Value', str2double(vals{1}));
     sa_rightpanel('changePlotType');
     %set values of the plot specific controls at startup
     idx = 2;

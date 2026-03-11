@@ -134,7 +134,7 @@ elseif strcmp(action, 'plot')
             uicontrol(limHndl);
             return;
         end
-        limt = str2num(limt);
+        limt = str2double(limt);
         limt = min(limt, 100);
         limt = limt / 100;
     else
@@ -169,7 +169,7 @@ elseif strcmp(action, 'plot')
             uicontrol(thresholdHndl);
             return;
         end
-        thr = str2num(thr);
+        thr = str2double(thr);
         thr = min(thr, 100);
         thr = thr / 100;
     else
@@ -207,16 +207,16 @@ elseif strcmp(action, 'set')
     colour = vals{idx};idx = idx + 1;
     
     opts = get(sensList, 'UserData');
-    set(opts(str2num(senstype)), 'Value', 1);
-    set(derivHndl, 'Value', str2num(deriv));
+    set(opts(str2double(senstype)), 'Value', 1);
+    set(derivHndl, 'Value', str2double(deriv));
     opts = get(varHndl, 'UserData');
-    set(opts(str2num(var)), 'Value', 1);
+    set(opts(str2double(var)), 'Value', 1);
     set(limHndl, 'String', limt);
-    set(sortHndl, 'Value', str2num(srt));
-    set(highlightHndl, 'Value', str2num(hl));
+    set(sortHndl, 'Value', str2double(srt));
+    set(highlightHndl, 'Value', str2double(hl));
     set(thresholdHndl, 'String', thr);
-    set(ptHndl, 'Value', str2num(pt));
-    set(colourList, 'Value', str2num(colour));
+    set(ptHndl, 'Value', str2double(pt));
+    set(colourList, 'Value', str2double(colour));
     
     sa_plotsensitivity('changeType');
     

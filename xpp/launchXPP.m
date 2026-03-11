@@ -284,8 +284,9 @@ elseif strcmp(action,'ok')
         force = [];
     end
     
-    
-    t_len = str2num(get(cpHndl, 'string'));
+
+
+    t_len = str2double(get(cpHndl, 'string'));
     if isempty(t_len) || isnan(t_len) || t_len <= 0
         ShowError('Please enter a positive numeric value for cycle period');
         uicontrol(cpHndl);
@@ -377,20 +378,26 @@ elseif strcmp(action,'getparams')
     pfile = get(selparamHndl, 'string');
     pfile = pfile{get(selparamHndl, 'Value')};
     if exist(fullfile(model.dir, pfile), 'file') == 2
-        values = textread(fullfile(model.dir, pfile), '%f');
+        fid_tmp = fopen(fullfile(model.dir, pfile), 'r');
+        tmp_scan = textscan(fid_tmp, '%f');
+        fclose(fid_tmp);
+        values = tmp_scan{1};
         set(paramTbl, 'data', [model.parn num2cell(values)]);
     else
         set(paramTbl, 'data', [model.parn cell(length(model.parn, 1))]);
     end
-    
-    
+
+
 elseif strcmp(action,'getinitcond')
-    
+
     %new init cond file
     yfile = get(selvarHndl, 'string');
     yfile = yfile{get(selvarHndl, 'Value')};
     if exist(fullfile(model.dir, yfile), 'file') == 2
-        values = textread(fullfile(model.dir, yfile), '%f');
+        fid_tmp = fopen(fullfile(model.dir, yfile), 'r');
+        tmp_scan = textscan(fid_tmp, '%f');
+        fclose(fid_tmp);
+        values = tmp_scan{1};
         set(varTbl, 'data', [model.vnames num2cell(values)]);
     else
         set(varTbl, 'data', [model.vnames cell(length(model.vnames), 1)]);

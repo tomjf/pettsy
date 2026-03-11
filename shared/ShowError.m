@@ -6,20 +6,13 @@ function  ShowError(msg, varargin)
 se = '';
 l = [];
 if nargin > 1
-       
+    if isa(varargin{1}, 'MException')
         %show system error message
         l=varargin{1};
- else
-     l = lasterror;
+    end
+     se = {l.message , [l.stack(1).file ' line ' num2str(l.stack(1).line)]};
+     se = regexprep(se, '<[^>]+>', '');
 end
- 
-if (length(l.stack) > 0)
-  se = {l.message , [l.stack(1).file ' line ' num2str(l.stack(1).line)]};
-else
-     se = {l.message };
-end
-  se = regexprep(se, '<[^>]+>', '');
-
 
 if ~isempty(l)
     
@@ -76,19 +69,11 @@ txtHndl=uicontrol( ...
     
 set(f, 'resizefcn', {@resize_err_form, txtHndl, closeHndl});
     
-import javax.swing.*
-import java.awt.*
-jscrollpane = findjobj(txtHndl);
-jscrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-jscrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-jeditbox = jscrollpane.getViewport.getView;
-%make non-editable
-jeditbox.setEditable(false);
-%make lines wrap
-jeditbox.setWrapping(true);
-%set content type
-jeditbox.setContentType('text/html');
-set(txtHndl, 'string', msg);
+% Replace the plain uicontrol with an HTML-capable panel
+delete(txtHndl);
+figsize = get(f, 'position');
+txtpos = [0.25 1.25 figsize(3)-0.5 figsize(4)-1.5];
+[txtHndl, ~] = create_html_panel(f, txtpos, msg, false);
 
 %==========================================================================
 

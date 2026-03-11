@@ -114,13 +114,19 @@ for p = 1:length(paths)
                         type = regexp(modelpath, '[\\/]', 'split');
                         mdl.type = lower(type{end});
                         mdl.dir = fullfile(modelpath, mdl.name);
-                        [parn, parv, parnames] = textread(fullfile(mdl.dir,  [mdl.name, '.par']), '%s %f %[^\n]');
+                        fid_tmp = fopen(fullfile(mdl.dir,  [mdl.name, '.par']), 'r');
+                        tmp_scan = textscan(fid_tmp, '%s %f %[^\n]');
+                        fclose(fid_tmp);
+                        parn = tmp_scan{1}; parv = tmp_scan{2}; parnames = tmp_scan{3};
                         mdl.parn = parn;
                         mdl.parnames = parnames;
                         mdl.parv = parv; %default values
                         mdl.pnum = length(mdl.parn);
                         %check the number of model variables
-                        [varn init_cond vardesc] = textread(fullfile(mdl.dir,  [mdl.name, '.varn']), '%s %f %[^\n]');
+                        fid_tmp = fopen(fullfile(mdl.dir,  [mdl.name, '.varn']), 'r');
+                        tmp_scan = textscan(fid_tmp, '%s %f %[^\n]');
+                        fclose(fid_tmp);
+                        varn = tmp_scan{1}; init_cond = tmp_scan{2}; vardesc = tmp_scan{3};
                         mdl.vnum = length(varn);
                         mdl.vnames = varn;
                         mdl.vardesc = vardesc;
@@ -131,7 +137,10 @@ for p = 1:length(paths)
                         %Determines if this model should appear in sagui
                         
                         %read info file
-                        fc = textread(fullfile(mdl.dir, [mdl.name '.info']) , '%[^\n]');
+                        fid_tmp = fopen(fullfile(mdl.dir, [mdl.name '.info']), 'r');
+                        tmp_scan = textscan(fid_tmp, '%[^\n]');
+                        fclose(fid_tmp);
+                        fc = tmp_scan{1};
                         idx = find(strcmp(fc, 'tend'));
                         mdl.tend = fc{idx+1};
                         idx = find(strcmp(fc, 'method'));
@@ -162,7 +171,7 @@ for p = 1:length(paths)
                         idx = find(strcmp(fc, 'orbit_type'));
                         mdl.orbit_type = fc{idx+1};
                         idx = find(strcmp(fc, 'plotting_timescale'));
-                        mdl.plotting_timescale = str2num(fc{idx+1});
+                        mdl.plotting_timescale = str2double(fc{idx+1});
                         idx = find(strcmp(fc, 'dim'));
                         mdl.dim = fc{idx+1};
                         modelnames = [modelnames mdl];

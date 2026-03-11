@@ -49,35 +49,7 @@ if strcmp(action, 'init')
        'FontUnits', 'points', 'FontSize', 10, 'Backgroundcolor',maincol);
   
     txtpos = [0.5 0.5 panelwidth-1 panelheight-3.5];
-    try
-        import javax.swing.*
-        import java.awt.*
-      
-        %java must position in pixels
-        pixels_per_cm = get(0, 'screenpixelsperinch')/2.54;
-
-        txtHndl = javaObjectEDT('javax.swing.JTextPane');
-        jscroll = javacomponent(javax.swing.JScrollPane(txtHndl), txtpos*pixels_per_cm, panel);
-        jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        txtHndl.setEditable(true);
-        txtHndl.setContentType('text/html');
-       
-         
-    catch
-        %didn't work, use standard matlab ctrl without html
-       
-        
-        txtHndl=uicontrol( ...
-            'Style','edit', ...
-            'Units','centimeters', ...
-            'position',txtpos, ...
-            'Parent',panel, ...
-            'BackgroundColor', 'w', ...
-            'horizontalalignment', 'left', ...
-            'string', '', ...
-            'max', 10, 'min', 0, ...
-            'FontUnits', 'points', 'FontSize', 9, 'FontName', 'SansSerif');
-    end
+    [txtHndl, ~] = create_html_panel(panel, txtpos, '', true);
     
   
     data = [];
@@ -111,11 +83,7 @@ elseif strcmp(action, 'show')
         end
         fclose(file);
         
-        try
-             txtHndl.setText(notes);
-        catch
-            set(txtHndl, 'string', notes);
-        end
+        set(txtHndl, 'String', notes);
       
        
     end
@@ -130,11 +98,9 @@ elseif strcmp(action, 'gonext')
 
     %called when user click Next.
     r = [];
-    try
-       model.notes = char(txtHndl.getText());
-       model.notes = char(regexp(model.notes, '<body>(.*)</body>', 'tokens', 'once'));
-    catch
-       model.notes = get(txtHndl, 'string');
+    model.notes = get(txtHndl, 'String');
+    if iscell(model.notes)
+        model.notes = strjoin(model.notes, sprintf('\n'));
     end
     model.notes = fixXMLString(model.notes);
 

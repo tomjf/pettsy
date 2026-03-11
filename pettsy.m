@@ -56,16 +56,6 @@ if nargin == 0 || strcmp(varargin{1}, 'init')  %initialisation
         addpath(genpath(pwd));
     end
     
-    java_dir = fullfile(mydir, 'java');
-    javaaddpath(java_dir);
-    
-    mydir = fileparts(mfilename('fullpath')); %in case javaaddpath clears global vars
-    
-    jar_files = dir([java_dir filesep '*.jar']);
-    for i = 1:length(jar_files)
-        javaaddpath([java_dir filesep jar_files(i).name]);
-    end
-    
     wbHndl = waitbar(0.05,'Searching for models...', 'Name', 'PeTTSy', 'pointer', 'watch', 'resize', 'off');
     
     %find installed models
@@ -304,7 +294,7 @@ elseif strcmp(action, 'ModelMenuChanged')
     %check the selected item and uncheck the others
     set(selItem, 'Checked', 'on');
     for i = 1:length(menuHndls_th)
-        if menuHndls_th(i) ~= selItem;
+        if menuHndls_th(i) ~= selItem
             set(menuHndls_th(i), 'Checked', 'off');
         end
     end

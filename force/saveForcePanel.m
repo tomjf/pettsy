@@ -99,23 +99,23 @@ elseif strcmp(action, 'preview')
     cla(previewHndl);
     
     force_eqn = get(eqnHndl, 'string');
-    
+
     dawn = get(dawnHndl, 'string');
-    dawn = str2num(dawn);
+    dawn = str2double(dawn);
     if isempty(dawn) || dawn < 0
         ShowError('Please enter a positive numeric value for dawn.');
         uicontrol(dawnHndl);
         return;
     end
     dusk = get(duskHndl, 'string');
-    dusk = str2num(dusk);
+    dusk = str2double(dusk);
     if isempty(dusk) || dusk < 0
         ShowError('Please enter a positive numeric value for dusk.');
         uicontrol(duskHndl);
         return;
     end
     CP = get(cpHndl, 'string');
-    CP = str2num(CP);
+    CP = str2double(CP);
     if isempty(CP) || CP < 0
         ShowError('Please enter a positive numeric value for cycle period or length of simulation.');
         uicontrol(cpHndl);
@@ -155,9 +155,9 @@ elseif strcmp(action, 'finished')
     if force_eqn(end) ~= ';'
         force_eqn = [force_eqn ';'];
     end
-  
-    mydir = fileparts(mfilename('fullpath'));
-    forcedeffile = fullfile(mydir,  '../symbolic', 'get_force_expr.m');
+    sassydir = fileparts(mfilename('fullpath'));
+
+    forcedeffile = fullfile(sassydir, '..', 'symbolic', 'get_force_expr.m');
     
     fp1 = fopen(forcedeffile, 'r');
     fp2 = fopen([forcedeffile '.new' ], 'w');
@@ -183,7 +183,7 @@ elseif strcmp(action, 'finished')
                 fidx = regexp(filecontents{i}, '\s*case\s+(\d+)', 'tokens', 'once');
                 %check last force added
                 if ~isempty(fidx)
-                    forcenum = str2num(char(fidx));
+                    forcenum = str2double(char(fidx));
                 end
                 if strcmp(strtrim(filecontents{i}), 'otherwise')
                     %end of switch
@@ -241,19 +241,25 @@ function [ok, tvals, forceval] = validForce(force_eqn, dawn, dusk, CP)
 ok = false; tvals = []; forceval = [];
 %validate equation
 try
-    vars =  symvar(force_eqn);
+    vars = symvar(force_eqn);
 catch err
     ShowError('There was an error anaylsing your equation. Please check the syntax.', err);
     return;
 end
 
-badvars = find((~strcmp(vars, 'dawn') & ~strcmp(vars, 'dusk') & ~strcmp(vars, 'CP') & ~strcmp(vars, 'CP') & ~strcmp(vars, 't')));
+badvars = [];
+for vi = 1:length(vars)
+    vname = char(vars(vi));
+    if ~strcmp(vname, 'dawn') && ~strcmp(vname, 'dusk') && ~strcmp(vname, 'CP') && ~strcmp(vname, 't')
+        badvars = [badvars vi];
+    end
+end
 
 
 if ~isempty(badvars)
     bv = '';
     for i = 1:length(badvars)
-        bv = [bv ' ' vars(badvars(i))];
+        bv = [bv ' ' char(vars(badvars(i)))];
     end
     ShowError(['Unknown variable name:' bv]);
     return;
@@ -261,9 +267,9 @@ end
 
 try
     varname = sym('dawn');
-    d = diff(sym(str2sym(force_eqn)), varname);
+    d = diff(str2sym(force_eqn), varname);
     varname = sym('dusk');
-    d = diff(sym(str2sym(force_eqn)), varname);
+    d = diff(str2sym(force_eqn), varname);
 catch err
     ShowError(['Unable to calculate the derivative of this equation with respect to ' char(varname)], err);
     return;

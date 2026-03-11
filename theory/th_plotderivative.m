@@ -240,13 +240,13 @@ elseif strcmp(action, 'set')
     %The order they are set in must match the order they are written to file
     %in
     numvar = length(get(varList, 'String'));
-    vars = str2num(vars);
+    vars = sscanf(vars, '%f')';
     m = find( vars > numvar);
     vars(m) = [];
     set(varList, 'Value', vars);
     opts = get(scaleHndl, 'UserData');
-    set(opts(str2num(scalev)), 'Value', 1);
-    set(divHndl, 'Value', str2num(divts));
+    set(opts(str2double(scalev)), 'Value', 1);
+    set(divHndl, 'Value', str2double(divts));
     %return index value for next panel
     r = idx; 
 elseif strcmp(action, 'save')

@@ -92,9 +92,12 @@ try
     
     sym_func_names = unique(sym_func_names);
     %Find all sym names
-    sym_names = symvar(eqn);
- 
-    sym_names{end+1} = 'pi'; %finsym doesnt find this so add it just in case
+    sym_vars = symvar(eqn);
+    sym_names = cell(1, length(sym_vars));
+    for ii = 1:length(sym_vars)
+        sym_names{ii} = char(sym_vars(ii));
+    end
+    sym_names{end+1} = 'pi'; %symvar doesnt find this so add it just in case
     
     %replace in equation, add brackets
     

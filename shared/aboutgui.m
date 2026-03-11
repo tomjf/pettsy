@@ -31,25 +31,7 @@ okButton = uicontrol(...
     titleStr = [titleStr '<br/>Release 1.0.2, September 2017<br/><br/>This software is distributed freely and without warranty under the terms of the <a href="http://www.gnu.org/licenses/gpl-3.0.en.html">GNU General Public License</a></span></body></html>'];
     
     labelpos_cm = [0.5 1.5 figwidth-1 figheight-1.75];
-    labelpos = (labelpos_cm / 2.54) * get(0, 'screenpixelsperinch'); %convert to pixels
-    
-   hLabel = javacomponent('javax.swing.JTextPane', labelpos, fig);
-   hLabel.setContentType('text/html');
-   hLabel.setText(titleStr);
-   hLabel.setEditable(false);
-   hLabel.setOpaque(0);
-   %hyperlinks don't just work, need to be programmed
-   set(hLabel, 'HyperlinkUpdateCallback', @getlicense);
-  
-   
-function getlicense(~, eventdata)
-
-eventype = char(eventdata.getEventType);
-
-if strcmp(eventype, char(eventdata.getEventType.ACTIVATED))
-    %a click, not just mouse over/exit
-   web(char(eventdata.getURL), '-browser'); 
-end
+    [hLabel, ~] = create_html_panel(fig, labelpos_cm, titleStr, false);
    
    
    

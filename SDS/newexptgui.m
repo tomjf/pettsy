@@ -119,7 +119,7 @@ if strcmp(action,'init')
         'fontunits', 'points', 'fontsize', 10, ...
         'parent', panel);
     set([opTbl varTbl], 'units', 'pixels')
-    set(varTbl, 'celleditcallback', {@varchange, opTbl});
+    set(varTbl, 'CellEditCallback', {@varchange, opTbl});
  
 
     %name for new expt
@@ -162,8 +162,8 @@ elseif strcmp(action,'ok')
     timeVals = cell2mat(tp(:,1));
    tfrom_idx = find(timeVals, 1, 'first');
    tto_idx = find(timeVals , 1, 'last');
-   tfrom = str2num(tp{tfrom_idx, 2});
-   tto = str2num(tp{tto_idx, 2});
+   tfrom = str2double(tp{tfrom_idx, 2});
+   tto = str2double(tp{tto_idx, 2});
  
     %variables
  

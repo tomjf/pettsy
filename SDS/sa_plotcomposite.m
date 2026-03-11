@@ -148,7 +148,7 @@ elseif strcmp(action, 'plot')
             uicontrol(thresholdHndl);
             return;
         end
-        thr = str2num(thr);
+        thr = str2double(thr);
         thr = min(thr, 100);
         thr = thr / 100;
     else
@@ -181,7 +181,7 @@ elseif strcmp(action, 'plot')
             uicontrol(sealevelHndl);
             return;
         end
-        slv = str2num(slv);
+        slv = str2double(slv);
     else
         slv = [];
     end
@@ -220,21 +220,21 @@ elseif strcmp(action, 'set')
    
     
     opts = get(sensList, 'UserData');
-    set(opts(str2num(senstype)), 'Value', 1);
+    set(opts(str2double(senstype)), 'Value', 1);
     numvar = length(get(varHndl, 'String'));
-    var = str2num(var);
+    var = str2double(var);
     m = find( var > numvar);
     var(m) = [];
-    set(varHndl, 'Value', var);   
-    set(normChk, 'Value', str2num(nm));
+    set(varHndl, 'Value', var);
+    set(normChk, 'Value', str2double(nm));
     
-    set(sortChk, 'Value', str2num(srt));
-    set(highlightHndl, 'Value', str2num(hl));
+    set(sortChk, 'Value', str2double(srt));
+    set(highlightHndl, 'Value', str2double(hl));
     set(thresholdHndl, 'String', thr);
-    
+
     opts = get(scaleHndl, 'UserData');
-    set(opts(str2num(sc)), 'Value', 1);
-    set(sealevelChk, 'Value', str2num(sl));
+    set(opts(str2double(sc)), 'Value', 1);
+    set(sealevelChk, 'Value', str2double(sl));
     set(sealevelHndl, 'String', slv);
     
     sa_plotcomposite('changeType');
@@ -516,7 +516,7 @@ for p = 1:numplots
     %correct the scale
     if sl
         lbls = get(gca, 'YTickLabel');
-        lbls = str2num(lbls) + slv;
+        lbls = sscanf(lbls, '%f') + slv;
         set(gca, 'YTickLabel', lbls);
     end
     xlabel('k_i', 'fontsize', plot_font_size);

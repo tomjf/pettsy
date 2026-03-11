@@ -96,7 +96,10 @@ end
 
 updatebar(wbHndl, inc, 'Installing the model. Processing model parameters...');
 
-[parn, parv, parnames] = textread(fullfile(DefsDir, [name '.par']), '%s %f %[^\n]');
+fid_tmp = fopen(fullfile(DefsDir, [name '.par']), 'r');
+tmp_scan = textscan(fid_tmp, '%s %f %[^\n]');
+fclose(fid_tmp);
+parn = tmp_scan{1}; parv = tmp_scan{2}; parnames = tmp_scan{3};
 
 %parn names must exist
 %if default value smissing, set them all to one
@@ -172,11 +175,11 @@ try
     numForce = 0;
     for d = 1:length(rhs)
         svars = symvar(rhs(d));
-        for s= 1:length(svars)
-            
-            tmp = regexp(char(svars(s)), '^(force[0-9]?$)', 'match', 'ignorecase');
+        for s = 1:length(svars)
+            t = char(svars(s));
+            tmp = regexp(t, '^(force[0-9]?$)', 'match', 'ignorecase');
             if ~isempty(tmp)
-               forcenames{end+1} =  char(tmp); 
+               forcenames{end+1} =  char(tmp);
             end
         end
         updatebar(wbHndl, inc/length(rhs));
@@ -201,11 +204,10 @@ try
     %if only one force, can treat this as an old style definition and still
     %make the model
 
-catch
-    err = lasterror;
+catch err
     cd(rootdir);
-    
-    ShowError(['Badly formatted model definition file. ', err.message]); return;  
+
+    ShowError(['Badly formatted model definition file. ', err.message]); return;
 end
 cd(rootdir);
 
@@ -344,7 +346,10 @@ addpath(genpath(mdir));
 fname = fullfile(DefsDir, [name '.varn']);
 if exist(fname, 'file') == 2
     %file exists in defs directory
-    [varnames init_cond vardesc] = textread(fname, '%s %f %[^\n]');
+    fid_tmp = fopen(fname, 'r');
+    tmp_scan = textscan(fid_tmp, '%s %f %[^\n]');
+    fclose(fid_tmp);
+    varnames = tmp_scan{1}; init_cond = tmp_scan{2}; vardesc = tmp_scan{3};
     if length(varnames) ~= length(rhs) || length(init_cond) ~= length(rhs)
         ShowError('The variable names file has the wrong number of names'); return;  
     end
@@ -404,21 +409,21 @@ fclose(fid);
 eqn_info = [];
 for i = 1:dim
     sym_names = symvar(rhs(i));
-    
+
     tmp_info = struct('variables', [], 'parameters', [], 'force', []);
     for s = 1:length(sym_names)
         sym_name = char(sym_names(s));
         
         varnum = regexp(sym_name, 'y([0-9])?', 'tokens', 'ignorecase');
         if ~isempty(varnum)
-            tmp_info.variables = [tmp_info.variables, str2num(char(varnum{1}))];
+            tmp_info.variables = [tmp_info.variables, str2double(char(varnum{1}))];
         elseif  strcmp(sym_name, 'force')
             %force
             tmp_info.force = [tmp_info.force, 1];
         else
             forcenum = regexp(sym_name, 'force([0-9])?', 'tokens', 'ignorecase');
             if ~isempty(forcenum)
-                tmp_info.force = [tmp_info.force, str2num(char(forcenum{1}))];
+                tmp_info.force = [tmp_info.force, str2double(char(forcenum{1}))];
             else
                 %must be  parameter
                 parnum = find(strcmp(sym_name, parn));
@@ -446,7 +451,7 @@ dydtdk_tmp = savedifpar(name, mdir1, rhs, orbit_type, numForce, wbHndl, inc);
 
 updatebar(wbHndl, 0, 'Installing the model. Saving model information...');
 %save matrices in symbolic form for displaying to the user
-rhs_tmp = subs(rhs, varsym, varnames);
+rhs_tmp = subs(rhs, str2sym(varsym), str2sym(varnames));
 dydtdk_tmp = subs(dydtdk_tmp, str2sym(vari), str2sym(varnames));
 dydtdy_tmp = subs(dydtdy_tmp, [str2sym(varsym) str2sym(pari) str2sym(forcei)], [str2sym(varnames) str2sym(parn') str2sym(forcesym)]);
 for i = 1:dim
@@ -582,7 +587,7 @@ if exist(fname, 'file') == 2
         newline = filecontents{j};
         if strncmp('%%%tend',newline,7)
             [token, remain] = strtok(newline);
-            tend = str2num(remain);
+            tend = str2double(remain);
         end
         if strncmp('%%%positivity',newline,13)
             [token, remain] = strtok(newline);

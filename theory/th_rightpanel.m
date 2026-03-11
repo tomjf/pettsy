@@ -52,11 +52,7 @@ if strcmp(action, 'init')
    % descHndl = uicontrol('HorizontalAlignment', 'left','Parent',panel ,'Style', 'text','Units','centimeters','position',[0.5 pheight-3.3 pwidth-1 1.5],'string','','BackgroundColor', maincol, 'ForegroundColor', 'k', 'HandleVisibility', 'on', 'FontUnits', 'points', 'FontSize', 10);
    descHndl = uipanel('Parent',panel, 'BorderType', 'none' ,'Units','centimeters','position',[0.5 pheight-3.4 pwidth-1 1.7],'BackgroundColor', maincol, 'ForegroundColor', 'k', 'HandleVisibility', 'on', 'FontUnits', 'points', 'FontSize', 10);
    label_size_in_cm = [0 0 pwidth-1 1.7];
-   labelpos = (label_size_in_cm / 2.54) * get(0, 'screenpixelsperinch'); %convert to pixels
-   jDescHndl = javacomponent('com.mathworks.mwswing.MJLabel', labelpos, descHndl); %java lable which supports html
-   jDescHndl.setOpaque(0); %allow background color to show through
-   jDescHndl.setTipWhenTruncatedEnabled(1);
-   set(jDescHndl, 'VerticalAlignment', 1)
+   [jDescHndl, ~] = create_html_panel(descHndl, label_size_in_cm, '', false);
     
     %plot button
     plotHndl = uicontrol(...
@@ -132,22 +128,11 @@ elseif strcmp(action, 'changePlotType')
      tt_text = desc;
     desc = ['<html><span style = "font-size:9px">' desc]; %MD changed from 9 to 8 so all fits. 
 
-    jDescHndl.setText(desc);
-    
-     %insert line breaks in tooltip
-    space_idx = strfind(tt_text, ' ');
-    %allow about 100 chars per line
-    len = length(tt_text);
-    line_breaks = [100:100:len];
-    for i = 1:length(line_breaks)
-       %find closest space to desired break
-        [~, pos] = min(abs(space_idx-line_breaks(i)));
-        line_breaks(i) = space_idx(pos);
+    try
+        jDescHndl.Data = desc;
+    catch
+        set(jDescHndl, 'String', regexprep(desc, '<[^>]*>', ''));
     end
-    tt_text(line_breaks) = '@';
-    tt_text = regexprep(tt_text, '@', '<br/>');
- 
-    jDescHndl.setToolTipText(['<html>' tt_text]);
     
 elseif strcmp(action, 'changefile')
     %user has selected a new time series file
@@ -200,11 +185,11 @@ elseif strcmp(action, 'save')
         feval(PlotFuncs{p}, 'save', fp);
     end
     
-elseif strcmp(action, 'load') 
+elseif strcmp(action, 'load')
     %called at startup
     vals = varargin{1};
-    set(plotTypeHndl, 'Value', str2num(vals{1}));
-    sa_rightpanel('changePlotType');
+    set(plotTypeHndl, 'Value', str2double(vals{1}));
+    th_rightpanel('changePlotType');
     %set values of the plot specific controls at startup
     idx = 2;
     for p = 1:length(PlotFuncs)

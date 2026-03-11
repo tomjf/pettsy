@@ -1,6 +1,6 @@
 function dydt = f(t, y, p)
    
-% Goldbeter mammalian
+% Goldbeter mammalian with Rev bit added in
 
 eval(p);    
    
@@ -22,54 +22,54 @@ dydt = [
     % Phosphorilated and nonphosphorylated proteins PER and CRY in cytosol
     % ---------------------------------------------------------------------
   
-    % 4 Pc  (PER)    
+    % 5 Pc  (PER)    
     ksp*y(1) - v1p * y(4)/(kp + y(4)) + v2p * y(6)/(kdp + y(6))+...
-        k4 * y(8) - k3 * y(4)*y(5) - kdn * y(4);
+        k_4 * y(8) - k_3 * y(4)*y(5) - kdn * y(4);
        
-    % 5 Cc  (CRY)    
+    % 6 Cc  (CRY)    
     ksc*y(2) - v1c * y(5)/(kp + y(5)) + v2c * y(7)/(kdp + y(7))+...
-        k4 * y(8) - k3 * y(4)*y(5) - kdnc * y(5);
+        k_4 * y(8) - k_3 * y(4)*y(5) - kdnc * y(5);
 
-    % 6 Pcp  (PER-p)    
+    % 7 Pcp  (PER-p)    
     v1p*y(4)/(kp + y(4))- v2p * y(6)/(kdp + y(6))-vdpc*y(6)/(kd + y(6))-kdn * y(6);
 
-    % 7 Ccp  (CRY-p)    
+    % 8 Ccp  (CRY-p)    
     v1c*y(5)/(kp + y(5)) - v2c * y(7)/(kdp + y(7))-vdcc*y(7)/(kd + y(7))-kdn * y(7);
  
         
     % Phosphorilated and nonphosphorylated proteins PER-CRY complex
     % ---------------------------------------------------------------------
    
-    % 8 PCc (PER-CRY cytosol)
-    -v1pc*y(8)/(kp+y(8))+vdpc*y(10)/(kdp+y(10))-k4*y(8)+k3*y(4)*y(5)+k2*y(9)-...
-        k1*y(8)-kdn*y(8);
+    % 9 PCc (PER-CRY cytosol)
+    -v1pc*y(8)/(kp+y(8))+vdpc*y(10)/(kdp+y(10))-k_4*y(8)+k_3*y(4)*y(5)+k_2*y(9)-...
+        k_1*y(8)-kdn*y(8);
     
     
-    % 9 PCn (PER-CRY nucleus)
-    -v3pc*y(9)/(kp+y(9))+v4pc*y(11)/(kdp+y(11))-k2*y(9)+k1*y(8)-k7*y(14)*y(9)+...
-        k8*y(16)-kdn*y(9);
+    % 10 PCn (PER-CRY nucleus)
+    -v3pc*y(9)/(kp+y(9))+v4pc*y(11)/(kdp+y(11))-k_2*y(9)+k1*y(8)-k_7*y(14)*y(9)+...
+        k_8*y(16)-kdn*y(9);
     
-    % 10 PCcp (PER-CRY-p cytosol)
+    % 11 PCcp (PER-CRY-p cytosol)
     v1pc*y(8)/(kp+y(8))-vdpc*y(10)/(kdp+y(10))-vdpcc*y(10)/(kd+y(10))-kdn*y(10);
     
-    % 11 PCnp (PER-CRY-p nucleus)
+    % 12 PCnp (PER-CRY-p nucleus)
     v3pc*y(9)/(kp+y(9))-v4pc*y(11)/(kdp+y(11))-vdpcn*y(11)/(kd+y(11))-kdn*y(11);
    
     % Phosphorilated and nonphosphorylated protein BMAL1
     % ---------------------------------------------------------------------
    
-    % 12 Bc  (BMAL1 cytosol) 
-    ksb*y(3)-v1b*y(12)/(kp+y(12))+v2b*y(13)/(kdp+y(13))-k5*y(12)+k6*y(14)-kdn*y(12);
+    % 13 Bc  (BMAL1 cytosol) 
+    ksb*y(3)-v1b*y(12)/(kp+y(12))+v2b*y(13)/(kdp+y(13))-k_5*y(12)+k_6*y(14)-kdn*y(12);
     
-    % 13 Bcp (BMAL1-p cytosol)
+    % 14 Bcp (BMAL1-p cytosol)
     v1b * y(12)/(kp+y(12))-v2b*y(13)/(kdp+y(13))-vdbc*y(13)/(kd+y(13))-kdn*y(13);
     
-    % 14 Bn  (BMAL1 nucleus) 
+    % 15 Bn  (BMAL1 nucleus) 
     -v3b*y(14) / (kp + y(14)) + v4b * y(15) / (kdp + y(15))+...
-        k5 * y(12) - k6 * y(14) - k7*y(14)*y(9) + k8 * y(16) - kdn * y(14);
+        k_5 * y(12) - k_6 * y(14) - k_7*y(14)*y(9) + k_8 * y(16) - kdn * y(14);
     
     
-    % 15 Bnp (BMAL1-p nucleus)
+    % 16 Bnp (BMAL1-p nucleus)
     v3b*y(14) / (kp + y(14)) - v4b * y(15) / (kdp + y(15))-...
          vdbn * y(15)/(kd + y(15)) - kdn * y(15);
     
@@ -77,7 +77,7 @@ dydt = [
     % ---------------------------------------------------------------------
    
     % 16 In (PER-CRY-CLOCK-BMAL1)
-    -k8 * y(16) + k7 * y(14)*y(9) - vdin * y(16) / (kd + y(16)) - kdn * y(16);
+    -k_8 * y(16) + k_7 * y(14)*y(9) - vdin * y(16) / (kd + y(16)) - kdn * y(16);
     
 ];
 

@@ -45,7 +45,7 @@ if strcmp(action, 'init')
         'columnname', {'', 'Expt', 'Time Series', 'Range', 'Per', 'Variables'}, ...
         'rowname', {}, ...
         'fontunits', 'points', 'fontsize', 10, ...
-        'parent', panel, 'celleditcallback','sa_leftpanel(''changeexpt'');');
+        'parent', panel, 'CellEditCallback','sa_leftpanel(''changeexpt'');');
     
     set(exptsHndl, 'units', 'pixels')
     tblwidth = get(exptsHndl, 'position');
@@ -216,16 +216,19 @@ elseif strcmp(action, 'newmodel')
         exptfiles = dir([theModel.dir, '/results/*.expt']);
         for j = 1:length(exptfiles)
             %read file to get its details
-            cvs = textread([theModel.dir, '/results/' exptfiles(j).name], '%[^\n]');
+            fid_tmp = fopen([theModel.dir, '/results/' exptfiles(j).name], 'r');
+            tmp_scan = textscan(fid_tmp, '%[^\n]');
+            fclose(fid_tmp);
+            cvs = tmp_scan{1};
             datafile = char(cvs(1));                     
             tvals = sscanf(cvs{2}, '%f %f %d %d');
-            periodic = str2num(char(cvs(3)));
+            periodic = str2double(char(cvs(3)));
             vars = cell(0);
             for v = 4:length(cvs)
                 if strcmp(cvs{v}, '--')
-                   break; 
+                   break;
                 end
-               vars{end+1} = str2num(cvs{v}); 
+               vars{end+1} = sscanf(cvs{v}, '%f')';
             end
             if exist([theModel.dir, '/results/' datafile], 'file') == 2
                 sa_leftpanel('addexptfile', getFileName(exptfiles(j).name), getFileName(datafile), tvals, periodic, vars);
@@ -317,7 +320,10 @@ elseif strcmp(action, 'changeanalysis')
  %       tspan = [];
     else
         %valid file selected so fill in its settings
-        cvs = textread([theModel.dir, '/results/' fname '.an'], '%[^\n]');
+        fid_tmp = fopen([theModel.dir, '/results/' fname '.an'], 'r');
+        tmp_scan = textscan(fid_tmp, '%[^\n]');
+        fclose(fid_tmp);
+        cvs = tmp_scan{1};
         %which expts to select
         expts = cvs{1};
         %get list from an file
@@ -342,13 +348,13 @@ elseif strcmp(action, 'changeanalysis')
         end
         set(exptsHndl, 'data', expts);
         %parameters
-        pars = str2num(cvs{2});
+        pars = sscanf(cvs{2}, '%f')';
         if ~pars
             pars = [];
         end
         set(parHndl, 'Value', pars);
         %scale
-        sc = str2num(cvs{3});
+        sc = str2double(cvs{3});
         opt = get(scaleHndl, 'Userdata');
         set(opt(sc), 'Value', 1);
     end

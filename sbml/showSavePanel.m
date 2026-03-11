@@ -196,26 +196,27 @@ elseif strcmp(action, 'goback')
     
 elseif strcmp(action, 'finished')
     
-    
+
+
     %check for numeric values
     ctrl = findobj(panel, 'Tag', 'plotting_timescale');
-    timescale = str2num(get(ctrl, 'string'));
+    timescale = str2double(get(ctrl, 'string'));
     if isempty(timescale) || timescale <= 0
        ShowError('Please enter a positive numeric value for timescale.');
        uicontrol(ctrl);
         return;
     end
-    
+
     ctrl = findobj(panel, 'Tag', 'cycle_period');
-    cp = str2num(get(ctrl, 'string'));
+    cp = str2double(get(ctrl, 'string'));
     if isempty(cp) || cp <= 0
        ShowError('Please enter a positive numeric value for cycle period.');
        uicontrol(ctrl);
        return;
     end
-    
+
     ctrl = findobj(panel, 'Tag', 'tend');
-    tend = str2num(get(ctrl, 'string'));
+    tend = str2double(get(ctrl, 'string'));
     if isempty(tend) || tend <= 0
        ShowError('Please enter a positive numeric value for default time.');
        uicontrol(ctrl);

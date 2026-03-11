@@ -21,22 +21,22 @@ if dif1 == 0
 end
 
 s = symvar(dif1);
-    
+
 for n = 1:length(s)
     t = char(s(n));
-    for j=1:length(vp)            
+    for j=1:length(vp)
         if strcmp(t,vp{j})
             i=i+1;
             t1{i} = t;
             s1{i}=vps{j};
-            break;                   
+            break;
         end
     end
 end
 
 if length(t1)
    % dif = subs(dif1,s1,t1);
-    dif = subs(dif1,str2sym(t1),str2sym(s1)); % s1 and t1 swapped as param order has changed in function definition
+    dif = subs(dif1,str2sym(t1),str2sym(s1));
 else
     dif = dif1;
 end

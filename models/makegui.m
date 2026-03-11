@@ -56,34 +56,7 @@ if strcmp(action, 'init')
            
            
   txtpos = [0.5 0.5 panelwidth-1 panelheight-2.5];
-  try
-      import javax.swing.*
-      import java.awt.*
-      
-      %java must position in pixels
-      pixels_per_cm = get(0, 'screenpixelsperinch')/2.54;
-      
-      txtHndl = javaObjectEDT('javax.swing.JTextPane');
-      jscroll = javacomponent(javax.swing.JScrollPane(txtHndl), txtpos*pixels_per_cm, panel);
-      jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-      txtHndl.setEditable(false);
-      txtHndl.setContentType('text/html');
-               
-               
-  catch
-      %didn't work, use standard matlab ctrl without html
-      
-      
-      txtHndl=uicontrol( ...
-          'Style','text', ...
-          'Units','centimeters', ...
-          'position',txtpos, ...
-          'Parent',panel, ...
-          'BackgroundColor', 'w', ...
-          'horizontalalignment', 'left', ...
-          'string', '', ...
-          'FontUnits', 'points', 'FontSize', 9, 'FontName', 'SansSerif');
-  end
+  [txtHndl, txtIsHtml] = create_html_panel(panel, txtpos, '', false);
     
      makeHndl= uicontrol( ...
         'Style','pushbutton', ...
@@ -167,10 +140,10 @@ elseif strcmp(action, 'changemodel')
         model_info = ['<html><div style="padding:5px"><p>' orbit_type ' model with ' num2str(dim) ' equations</p><p></p>' sprintf('\n')  model_info '</div></html>'];
         
         try
-             txtHndl.setText(model_info);
+            txtHndl.Data = model_info;
         catch
             model_info = regexprep(model_info, '<[^>]*>', '');
-            set(txtHndl, 'string', model_info);
+            set(txtHndl, 'String', model_info);
         end
 
     end
@@ -217,7 +190,7 @@ function r = lineIsEquation(str)
 
 str = regexprep(str, '%.*', '');
 %extract anything between any [...]
-str = regexprep(str, '.*[', ''); %remove dydt = [
+str = regexprep(str, '.*\[', ''); %remove dydt = [
 str = regexprep(str, ']', '');
 
 

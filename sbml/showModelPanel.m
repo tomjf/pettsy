@@ -73,34 +73,7 @@ if strcmp(action, 'init')
        'FontUnits', 'points', 'FontSize', 10, 'Backgroundcolor',maincol);
   
     txtpos = [0.5 0.5 panelwidth-1 panelheight-4.5];
-    try
-        import javax.swing.*
-        import java.awt.*
-      
-        %java must position in pixels
-        pixels_per_cm = get(0, 'screenpixelsperinch')/2.54;
-
-        txtHndl = javaObjectEDT('javax.swing.JTextPane');
-        jscroll = javacomponent(javax.swing.JScrollPane(txtHndl), txtpos*pixels_per_cm, panel);
-        jscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED)
-        txtHndl.setEditable(true);
-        txtHndl.setContentType('text/html');
-       
-         
-    catch
-        %didn't work, use standard matlab ctrl without html
-       
-        
-        txtHndl=uicontrol( ...
-            'Style','text', ...
-            'Units','centimeters', ...
-            'position',txtpos, ...
-            'Parent',panel, ...
-            'BackgroundColor', 'w', ...
-            'horizontalalignment', 'left', ...
-            'string', '', ...
-            'FontUnits', 'points', 'FontSize', 9, 'FontName', 'SansSerif');
-    end
+    [txtHndl, ~] = create_html_panel(panel, txtpos, '', true);
     
   
     data = [];
@@ -120,13 +93,8 @@ elseif strcmp(action, 'show')
         set(levelHndl, 'string', num2str(sbml_model.SBML_level));
         set(versionHndl, 'string', num2str(sbml_model.SBML_version));
         
-        try
-             txtHndl.setText(sbml_model.notes);
-        catch
-            notes = sbml_model.notes; 
-            notes = regexprep(notes, '<[^>]*>', '');
-            set(txtHndl, 'string', notes);
-        end
+        notes = regexprep(sbml_model.notes, '<[^>]*>', '');
+        set(txtHndl, 'String', notes);
       
        
     end
@@ -148,10 +116,9 @@ elseif strcmp(action, 'gonext')
         ShowError('Please enter a valid model name consisting of alphanumeric characters and underscores, and beginning with an alphanumeric character.');
         return;
     end
-    try
-       sbml_model.sassynotes = char(txtHndl.getText());
-    catch
-       sbml_model.sassynotes = get(txtHndl, 'string');
+    sbml_model.sassynotes = get(txtHndl, 'String');
+    if iscell(sbml_model.sassynotes)
+        sbml_model.sassynotes = strjoin(sbml_model.sassynotes, sprintf('\n'));
     end
     
     %analyse the model species

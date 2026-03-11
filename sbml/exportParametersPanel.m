@@ -160,7 +160,10 @@ if strcmp(fname, '-none-')
   
 else
     %read selected file
-    pvals = textread(fullfile(model.dir, fname), '%f');
+    fid_tmp = fopen(fullfile(model.dir, fname), 'r');
+    tmp_scan = textscan(fid_tmp, '%f');
+    fclose(fid_tmp);
+    pvals = tmp_scan{1};
     if length(pvals) ~= size(tblData, 1)
         ShowError('The selected parameters file is invalid.');
         return; 

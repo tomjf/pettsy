@@ -124,7 +124,7 @@ elseif strcmp(action, 'plot')
         uicontrol(thresholdHndl);
         return;
     end
-    thr = str2num(thr);
+    thr = str2double(thr);
     thr = min(thr, 100);
     thr = thr / 100;
     
@@ -153,12 +153,12 @@ elseif strcmp(action, 'set')
     nm = vals{idx};idx = idx + 1;
     
     opts = get(sensList, 'UserData');
-    set(opts(str2num(senstype)), 'Value', 1);
-    set(derivHndl, 'Value', str2num(deriv));
+    set(opts(str2double(senstype)), 'Value', 1);
+    set(derivHndl, 'Value', str2double(deriv));
     opts = get(varHndl, 'UserData');
-    set(opts(str2num(var)), 'Value', 1);
+    set(opts(str2double(var)), 'Value', 1);
     set(thresholdHndl, 'String', thr);
-    set(normChk, 'Value', str2num(nm));
+    set(normChk, 'Value', str2double(nm));
     
     sa_plottseriessens('changeType');
     
