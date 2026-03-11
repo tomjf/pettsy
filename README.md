@@ -336,7 +336,20 @@ The function used `fileparts(which('pettsy.m'))` to find the PeTTSy installation
 
 If you use PeTTSy in your research, please cite:
 
-> Domijan M, Brown P, Shulgin B, Rand DA. PeTTSy: Perturbation Theory Toolbox for Systems. *In preparation*.
+> Domijan M, Brown PE, Shulgin BV, Rand DA. PeTTSy: a computational tool for perturbation analysis of complex systems biology models. *BMC Bioinformatics*. 2016;17:124.
+
+```bibtex
+@article{domijan2016pettsy,
+  title={PeTTSy: a computational tool for perturbation analysis of complex systems biology models},
+  author={Domijan, Mirela and Brown, Paul E and Shulgin, Boris V and Rand, David A},
+  journal={BMC bioinformatics},
+  volume={17},
+  number={1},
+  pages={124},
+  year={2016},
+  publisher={Springer}
+}
+```
 
 ## Release History
 
