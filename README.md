@@ -57,6 +57,28 @@ docs/               - Documentation
 - **Data Export**: Export results to MATLAB workspace
 - **SBML Support**: Import/export models in Systems Biology Markup Language format (requires libSBML)
 
+## Documentation
+
+A full user guide is included in the repository at [`docs/Using_PeTTSy.pdf`](docs/Using_PeTTSy.pdf).
+
+The theory behind PeTTSy is described in the following papers, which should be read alongside the documentation:
+
+- D. A. Rand. [Mapping the global sensitivity of cellular network dynamics: sensitivity heat maps and a global summation law](https://scholar.google.com/scholar?cluster=14685091963220498498). *J. R. Soc. Interface* (2008) 5, S59-S69. doi:10.1098/rsif.2008.0084.focus
+- D. A. Rand, B. V. Shulgin, D. Astrov, V. Catinus. [Uncovering the design principles of circadian clocks: mathematical analysis of flexibility and evolutionary goals](https://scholar.google.com/scholar?cluster=7756601693498707988). *J. Theor. Biol.* (2006) 238, 616-635.
+- M. Domijan, P. E. Brown, B. V. Shulgin, D. A. Rand. [PeTTSy: a computational tool for perturbation analysis of complex systems biology models](https://scholar.google.com/scholar?cluster=2998386785498348498). *BMC Bioinformatics* (2016) 17:124.
+
+## Quick Start
+
+1. Launch PeTTSy by running `pettsy` from the MATLAB command window
+2. Click **Install Model** and select a model definition from the list (e.g. `mammalian`)
+3. Once installed, select the model from the **Model** dropdown
+4. Click **New Time Series** to compute a limit cycle with default parameters
+5. Click **Run Theory** to perform perturbation theory analysis on the time series
+6. Use the **Plot** tabs to visualise results: time series, derivatives, IRCs, phase plots, and more
+7. Use **SDS** (via `sagui`) for SVD-based sensitivity decomposition analysis
+
+For detailed instructions on defining custom models, configuring external forces, and interpreting results, see [`docs/Using_PeTTSy.pdf`](docs/Using_PeTTSy.pdf).
+
 ---
 
 ## What's New in 1.0.3
@@ -331,6 +353,24 @@ The function used `fileparts(which('pettsy.m'))` to find the PeTTSy installation
 - **`lcycle/find_oscillator_cycle 2.m`** - Accidental backup file with a space in the name.
 
 ---
+
+## Known Issues and Compatibility Notes
+
+- **SBML Export**: The SBML export feature (`sbml/ODEToMathML.m`) still relies on the `TextToMathML2` Java class (based on SnuggleTeX) to convert equations to MathML. This will not work on MATLAB versions where Java Swing interop has been fully removed. The rest of PeTTSy functions normally without SBML support.
+- **SUNDIALS/CVode MEX binaries**: The `sundialsTB/` directory contains pre-compiled MEX binaries (`.mexa64`, `.mexmaci64`, `.mexw64`) for the SUNDIALS CVode solver. These are platform-specific and may need recompilation for your system. The standard MATLAB ODE solvers (`ode45`, `ode15s`) are used by default and do not require SUNDIALS.
+- **MATLAB version**: Tested on R2025a. Should work on R2022a and later. Versions prior to R2022a are not supported due to the removal of `lasterror` and other deprecated functions.
+- **Apple Silicon**: The included `.mexmaci64` binary is for Intel Macs. On Apple Silicon (M1/M2/M3/M4), MATLAB runs under Rosetta 2 and should load the Intel MEX file, but you may need to recompile from source for native performance. This only affects the optional SUNDIALS solver.
+
+## Contributing
+
+This is a community fork of the [original PeTTSy repository](https://github.com/pebrown88/pettsy). Contributions are welcome:
+
+1. Fork this repository
+2. Create a feature branch (`git checkout -b my-feature`)
+3. Make your changes and test in MATLAB
+4. Submit a pull request
+
+If you find a bug or have a feature request, please [open an issue](https://github.com/tomjf/pettsy/issues).
 
 ## Citation
 
